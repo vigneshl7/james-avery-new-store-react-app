@@ -1,5 +1,5 @@
-$proximaRegular-font-path: "../webFonts/ProximaNovaRegular";
-$proximaBold-font-path: "../webFonts/ProximaNovaBold";
+$proximaRegular-font-path: "/webFonts/ProximaNovaRegular";
+$proximaBold-font-path: "/webFonts/ProximaNovaBold";
 
 @font-face {
     // This is parsed as a normal function call that takes a quoted string.

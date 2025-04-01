@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 const EngravingFrontSide = ({ side, setActiveSide, onUpdate }) => {
   const [engravingType, setEngravingType] = useState("laser"); // 'laser' or 'hand'
   const [selectedFont, setSelectedFont] = useState("Lucida Calligraphy");
-  const [lines, setLines] = useState(["", "", ""]); // Supports up to 2 lines
-  const [fullInput, setFullInput] = useState(["", "", ""]); // Stores full input
-  const maxLength = 10; // Set maximum character length
+  const [lines, setLines] = useState(["", "", ""]); 
+  const [fullInput, setFullInput] = useState(["", "", ""]); 
+  const maxLength = 10; 
   const [errorMessages, setErrorMessages] = useState(["", "", ""]);
   const [activeInputIndex, setActiveInputIndex] = useState(null);
 const [cursorPosition, setCursorPosition] = useState(0);
@@ -26,7 +26,6 @@ const [cursorPosition, setCursorPosition] = useState(0);
     // onUpdate(side, lines, font, engravingType);
   };
   const handleTextChange = (index, value) => {
-    // Update full input state so users can see full text
     setFullInput((prev) => {
       const newInputs = [...prev];
       newInputs[index] = value;
@@ -325,7 +324,7 @@ const [cursorPosition, setCursorPosition] = useState(0);
                       data-template-code="STD_11x8"
                       data-scene7-text=""
                       data-order-line-text=""
-                      value={lines[1]}
+                      value={fullInput[1]}
                       onChange={(e) => handleTextChange(1, e.target.value)}
                       onFocus={(e) => {
                         setActiveInputIndex(1);
