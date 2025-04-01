@@ -1,0 +1,803 @@
+.cyo-exit-modal .modal-dialog {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center
+}
+
+.cyo-exit-modal .modal-content {
+    width: 100%;
+    max-width: 20rem;
+    height: 14.4375rem;
+    border-radius: 0
+}
+
+.cyo-exit-modal .modal-header {
+    padding: .625rem
+}
+
+.cyo-exit-modal .modal-header .btn-close {
+    color: #000;
+    background-size: .6875rem
+}
+
+.cyo-exit-modal .modal-body {
+    font-size: .875rem
+}
+
+.cyo-exit-save-to-wishlist {
+    padding-top: .75rem
+}
+
+.cyo-exit-save-to-wishlist-btn {
+    padding: .5rem 1.125rem;
+    line-height: 1.1875rem;
+    font-size: .875rem;
+    outline: none
+}
+
+.cyo-exit-continue-design {
+    padding: 1.25rem 0;
+    line-height: 17px
+}
+
+.cyo-exit-dont-save {
+    line-height: 17px
+}
+
+.cyo-exit-dont-save-btn:hover {
+    color: #000
+}
+
+.cyo-engraving-product-detail .info-icon {
+    background-image: url("https://www.jamesavery.com/on/demandware.static/Sites-JamesAvery-Site/-/en_US/v1742827110264/images/cyo-engraving-spirite.svg");
+    display: inline-block;
+    width: 1rem;
+    height: 1rem
+}
+
+.cyo-engraving-product-detail .cta-engguidlines {
+    text-decoration: underline;
+    letter-spacing: -0.9px
+}
+
+.cyo-engraving-product-detail .cta-engguidlines:hover,.cyo-engraving-product-detail .cta-engguidlines:focus {
+    color: #bc2424
+}
+
+.cyo-engraving-product-detail .product-detail-left-section {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    position: relative
+}
+
+.cyo-engraving-product-detail .product-detail-left-section img {
+    margin: 0 auto;
+    max-height: 21.5625rem
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-left-section img {
+        max-height:calc(100vh - 195px)
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-left-section .no-preview-message {
+    position: absolute;
+    text-align: center;
+    font-size: .75rem;
+    bottom: 1.25rem
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-left-section .no-preview-message {
+        bottom:2.5rem
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section {
+        height:calc(100vh - 195px);
+        overflow: auto
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone {
+    display: none;
+    width: 100%;
+    margin: auto;
+    text-align: center
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone {
+        padding-left:1.875rem;
+        text-align: left;
+        margin-top: 3.75rem
+    }
+}
+
+@media (min-width: 1200px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone {
+        margin-right:2.5rem
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone.active {
+    display: block
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .pagination {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin: 1.25rem 0
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .pagination {
+        -webkit-box-pack:start;
+        -ms-flex-pack: start;
+        justify-content: flex-start
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .pagination .pagination-number {
+    font-size: .75rem;
+    color: #6c6c6c;
+    margin: .125rem .9375rem 0 .625rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .pagination .page-item {
+    margin-right: .9375rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .pagination .page-item.next-page-item {
+    margin-right: 0
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .pagination .page-item.disabled .page-link.previous-page-link {
+    background-position: -3rem .125rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .pagination .page-item.disabled .page-link.next-page-link {
+    background-position: -4.3125rem .125rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .pagination .page-item .page-link {
+    background-image: url("https://www.jamesavery.com/on/demandware.static/Sites-JamesAvery-Site/-/en_US/v1742827110264/images/cyo-engraving-spirite.svg");
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 0;
+    padding: 0;
+    border-radius: 0;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline-color: transparent
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .pagination .page-item .page-link.previous-page-link {
+    background-position: .1875rem .125rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .pagination .page-item .page-link.next-page-link {
+    background-position: -.6875rem .125rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .want-to-attach-to-holder-section {
+    padding: 2.375rem 0;
+    border-top: 1px solid #d7d7d7
+}
+
+@media (min-width: 769px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .want-to-attach-to-holder-section {
+        padding:1.75rem 0
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .want-to-attach-to-holder-heading {
+    font-family: "ProximaNova-Regular",sans-serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1;
+    margin-bottom: .5rem
+}
+
+@media (min-width: 769px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .want-to-attach-to-holder-heading {
+        margin-bottom:.3125rem
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .want-to-attach-to-holder-link {
+    text-decoration: underline
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .want-to-attach-to-holder-link:hover {
+    color: inherit;
+    text-decoration: none
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone #nav-tab {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone #nav-tab {
+        -webkit-box-pack:start;
+        -ms-flex-pack: start;
+        justify-content: flex-start
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone #nav-tab .select-font-name {
+    margin-top: .625rem
+}
+
+@media (max-width: 991.98px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone #nav-tab .select-font-name {
+        width:100%;
+        text-align: center;
+        font-size: .875rem
+    }
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone #nav-tab .select-font-name {
+        margin-top:1.25rem
+    }
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone #nav-tab .nav-item {
+        margin-top:1.25rem
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone #nav-tab .nav-item .nav-link {
+    color: #363636;
+    margin-left: .25rem;
+    font-size: .875rem;
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container {
+    margin-top: 1.25rem;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container {
+        -webkit-box-pack:start;
+        -ms-flex-pack: start;
+        justify-content: flex-start
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container .laser-font-click,.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container .hand-font-click {
+    max-width: 4.25rem;
+    text-align: center;
+    margin-right: .625rem;
+    text-decoration: none;
+    outline: none
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container .laser-font-click,.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container .hand-font-click {
+        margin-right:1.125rem
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container .laser-font-click .font-code,.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container .hand-font-click .font-code {
+    font-size: .625rem;
+    color: #6c6c6c
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container .laser-font-click img,.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container .hand-font-click img {
+    border: .125rem solid #fff
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container .laser-font-click img.active,.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container .hand-font-click img.active {
+    border-color: #000
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .content-cta {
+    font-size: .875rem;
+    text-decoration: underline;
+    margin-top: 1.25rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .content-cta .get-content-details:hover {
+    color: inherit
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .content-cta .info-icon {
+    background-position: -1.875rem 0;
+    background-repeat: no-repeat;
+    position: relative;
+    margin-right: .3125rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs {
+    margin: 2.5rem 0
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs {
+        margin-top:3.75rem
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs .info-icon {
+    background-position: -1.875rem 0;
+    background-repeat: no-repeat;
+    position: relative;
+    margin-left: .3125rem;
+    cursor: pointer
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs .info-icon {
+        margin-left:.625rem
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs .mono-enter-initials {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs .mono-enter-initials {
+        -webkit-box-pack:start;
+        -ms-flex-pack: start;
+        justify-content: flex-start
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs .input-form {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-top: 1.25rem;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs .input-form {
+        -webkit-box-pack:start;
+        -ms-flex-pack: start;
+        justify-content: flex-start
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs input.mono-form-control {
+    width: 3.125rem;
+    height: 3.125rem;
+    font-size: 1.5rem;
+    line-height: 1.375rem;
+    text-align: center;
+    padding: 0;
+    border-radius: 0;
+    border: 1px solid #d7d7d7;
+    display: block;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: none;
+    margin-bottom: .625rem;
+    text-transform: uppercase
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs input.mono-form-control:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs .input-container {
+    margin-right: .625rem;
+    text-align: center;
+    font-size: .875rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs .input-container .adjust-position {
+    position: relative;
+    top: .625rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .mono-inputs .input-container:nth-child(2) input.mono-form-control {
+    width: 4.375rem;
+    height: 4.375rem;
+    font-size: 3rem;
+    line-height: 1.375rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs {
+    margin: 2.5rem 0
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs {
+        margin-top:3.75rem
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .select-zone-name {
+    font-size: .875rem
+}
+
+@media (min-width: 992px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .select-zone-name {
+        font-size:16px
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .font-line {
+    color: #6c6c6c;
+    font-size: .8125rem;
+    position: relative;
+    top: .5625rem
+}
+
+@media (min-width: 576px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .font-line {
+        font-size:.875rem
+    }
+}
+
+@media (max-width: 991.98px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .font-line {
+        width:11%
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .input-form {
+    padding: 0
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .input-form {
+        padding-left:.625rem
+    }
+}
+
+@media (max-width: 991.98px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .input-form {
+        width:89%;
+        padding: 0 0 0 .625rem
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .error-danger input.form-control {
+    border-color: #bc2424
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .error-danger .cyo-error-message,.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .error-danger .current-counter {
+    color: #bc2424;
+    text-align: left
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .error-danger .cyo-error-message {
+    margin-top: .3125rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .error-danger .cyo-error-message:not(.is-blacklist)::before {
+    content: '';
+    background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23bc2424'><path d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/></svg>");
+    display: inline-block;
+    width: .625rem;
+    height: .625rem;
+    margin-right: .3125rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .error-unsupported-danger input.form-control {
+    border-color: #bc2424
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .error-unsupported-danger .cyo-unsupported-error-message {
+    color: #bc2424;
+    text-align: left;
+    margin-top: .3125rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .error-unsupported-danger .cyo-unsupported-error-message::before {
+    content: '';
+    background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23bc2424'><path d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/></svg>");
+    display: inline-block;
+    width: .625rem;
+    height: .625rem;
+    margin-right: .3125rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .error-unsupported-danger .cyo-unsupported-error-message .unsupported-info-icon {
+    background-position: -1.875rem 0;
+    background-repeat: no-repeat;
+    position: relative;
+    margin-left: .625rem;
+    top: .1875rem;
+    cursor: pointer
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .cyo-selection-error-message {
+    color: #bc2424;
+    margin-top: .625rem;
+    font-size: .875rem;
+    text-align: left
+}
+
+@media (min-width: 576px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .cyo-selection-error-message {
+        text-align:center
+    }
+}
+
+@media (min-width: 1200px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .cyo-selection-error-message {
+        margin-left:auto;
+        font-size: 16px;
+        text-align: left
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .cyo-selection-error-message::before {
+    content: '';
+    background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23bc2424'><path d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/></svg>");
+    display: inline-block;
+    width: .625rem;
+    height: .625rem;
+    margin-right: .3125rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .input-counter .form-control {
+    border-color: #d7d7d7;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline-color: transparent
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .input-counter .counter {
+    color: #6c6c6c;
+    font-size: .75rem;
+    position: absolute;
+    right: .625rem;
+    top: .625rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container {
+    margin-top: .625rem
+}
+
+@media (min-width: 576px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container {
+        margin-top:.9375rem
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container .symbol-objects {
+        -webkit-box-pack:justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between
+    }
+}
+
+@media (max-width: 991.98px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container .symbol-objects {
+        -webkit-box-pack:center;
+        -ms-flex-pack: center;
+        justify-content: center
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container .symbol-objects {
+        -webkit-box-pack:justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container .symbol-text {
+    color: #6c6c6c;
+    font-size: .875rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    padding-top: .25rem
+}
+
+@media (min-width: 769px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container .symbol-text {
+        margin-right:.625rem
+    }
+}
+
+@media (min-width: 1200px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container .symbol-text {
+        -webkit-box-flex:0;
+        -ms-flex: 0 0 auto;
+        flex: 0 0 auto;
+        width: 8.33333%;
+        margin-right: 0
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1439.98px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container .symbol-text {
+        margin-right:.3125rem
+    }
+}
+
+@media (min-width: 576px) and (max-width: 768.98px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container .symbol-text {
+        margin-right:.625rem
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container .see-more-symbols {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+    font-size: .875rem;
+    margin-left: .5625rem;
+    min-width: 4.375rem;
+    max-height: 1.25rem;
+    position: relative;
+    top: 9.75rem;
+    outline: none;
+    text-decoration: underline
+}
+
+@media (min-width: 576px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container .see-more-symbols {
+        top:2.375rem
+    }
+}
+
+@media (min-width: 1200px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container .see-more-symbols {
+        margin-left:1.25rem
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container .see-more-symbols:hover {
+    color: inherit;
+    text-decoration: none
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container.hide-row .symbol-text,.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container.hide-row .see-more-symbols {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 0;
+    top: .1875rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols-container.hide-row .symbols {
+    max-height: 1.9375rem;
+    overflow: hidden
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols {
+    grid-template-columns: repeat(5, minmax(25px, 1fr));
+    display: inline-grid;
+    grid-gap: .625rem 1.375rem;
+    padding: .125rem;
+    margin-top: -.125rem;
+    margin-left: -.125rem
+}
+
+@media (min-width: 576px) {
+    .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols {
+        grid-template-columns:repeat(11, minmax(25px, 1fr));
+        grid-gap: .3125rem
+    }
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols .laser-symbol-click,.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols .hand-symbol-click {
+    width: 1.5625rem;
+    text-decoration: none
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols .laser-symbol-click:hover,.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .std-inputs .symbols .hand-symbol-click:hover {
+    border: .125rem solid #000;
+    margin: -.125rem;
+    width: 1.8125rem
+}
+
+.cyo-engraving-product-detail .product-detail-right-section .engraving-zone .cyoeng-restriction-errmsg {
+    color: #bc2424
+}
+
+.cyo-engraving-product-detail .product-detail-right-section #nav-tab .active {
+    display: none
+}
+
+.engraving-details .modal-content {
+    border-radius: 0
+}
+
+@media (min-width: 576px) {
+    .engraving-details .modal-dialog {
+        max-width:20rem
+    }
+}
+
+.engraving-details .modal-header {
+    padding: .625rem
+}
+
+.engraving-details .modal-header .btn-close {
+    padding: 0;
+    margin: 0;
+    margin-left: auto;
+    width: .6875rem;
+    height: .6875rem;
+    opacity: 1;
+    border-radius: 0;
+    background-size: cover
+}
+
+.engraving-details .modal-body {
+    padding: 0 1.875rem 1.875rem;
+    text-align: center
+}
+
+#cyoEngravingModalError .modal-body {
+    font-size: 1.125rem
+}
+
+@media (min-width: 992px) {
+    #cyoEngravingModalError .modal-body {
+        font-size:1.25rem
+    }
+}
+
+.modal-backdrop.show {
+    opacity: 0.7
+}

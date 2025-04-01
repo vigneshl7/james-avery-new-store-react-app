@@ -1,0 +1,16 @@
+$proximaRegular-font-path: "../webFonts/ProximaNovaRegular";
+$proximaBold-font-path: "../webFonts/ProximaNovaBold";
+
+@font-face {
+    // This is parsed as a normal function call that takes a quoted string.
+    src: url("#{$proximaRegular-font-path}/font.woff2") format("woff2");
+    font-family: "ProximaNova-Regular";
+    font-weight: 400;
+}
+
+@font-face {
+    // This is parsed as a normal function call that takes a quoted string.
+    src: url("#{$proximaBold-font-path}/font.woff2") format("woff2");
+    font-family: "ProximaNova-Bold";
+    font-weight: 600;
+}
