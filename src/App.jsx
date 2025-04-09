@@ -6,7 +6,7 @@ const App = () => {
     <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/engrave" element={<Engrave />} />
+          <Route path="/Sites-JamesAvery-Site/en_US/Product-CyoShow" element={<Engrave />} />
         </Routes>
     </Router>
   );

@@ -12,7 +12,7 @@ const Header = () => {
                 data-jac="brandlogo"
               >
                 <a
-                  tabindex="0"
+                  tabIndex="0"
                   className="logo-home pl-2 from-engraving gtm-cyo-header-logo"
                   href="/"
                 >
@@ -37,7 +37,7 @@ const Header = () => {
               </div>
               <div className="btn-container cyo-btn-wrapper">
                 <a
-                  tabindex="0"
+                  tabIndex="0"
                   href="javascript:void(0)"
                   className="btn btn-primary font-proxima-bold cyo-btn-done  from-engraving  gtm-done-btn"
                   data-bs-toggle="modal"

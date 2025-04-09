@@ -1,3 +1,24 @@
+
+.cyo-global-footer{
+    .engraving-language-disclaimer{
+        .warning{
+            display:block;
+            margin-bottom:0.3rem;
+        }
+        .guidelines{
+            font-size:0.875rem;
+            font-weight:bold;
+            margin-bottom:0.3125rem;
+            display:block;
+        }
+        
+    }
+    .copyright{
+        font-size:0.75rem;
+        display:block;
+    }
+}
+
 .cyo-exit-modal .modal-dialog {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
@@ -291,6 +312,9 @@
     color: #363636;
     margin-left: .25rem;
     font-size: .875rem;
+    @media (min-width: 1024px) {
+        margin-left: 0.50rem;
+    }
 }
 
 .cyo-engraving-product-detail .product-detail-right-section .engraving-zone .font-container {

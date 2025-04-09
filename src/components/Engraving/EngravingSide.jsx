@@ -1,53 +1,123 @@
 import React, { useState } from "react";
+import SwitchTabs from "./SwitchTabs";
+import LaserEngravingFontStyles from "./LaserEngravingFontStyles";
+import HandEngravingFontStyles from "./HandEngravingFontStyles";
 
-const EngravingSide = ({ side, onUpdate }) => {
-  const [engravingType, setEngravingType] = useState("laser"); // 'laser' or 'hand'
-  const [selectedFont, setSelectedFont] = useState(null);
-  const [text, setText] = useState("");
-
-  const handleFontSelect = (font) => {
-    setSelectedFont(font);
-    onUpdate(side, text, font, engravingType);
-  };
-
-  const handleTextChange = (event) => {
-    setText(event.target.value);
-    onUpdate(side, event.target.value, selectedFont, engravingType);
-  };
+const EngravingSide = ({
+  side,
+  onUpdate,
+  setActiveSide,
+  zoneData,
+  engravingSkuAttributes,
+  data,
+  setSymbolMapInImage,
+  setisModelOpen,
+}) => {
+  const [engravingType, setEngravingType] = useState("laser");
 
   const toggleEngravingType = () => {
     setEngravingType((prev) => (prev === "laser" ? "hand" : "laser"));
-    onUpdate(side, text, selectedFont, engravingType);
+    // onUpdate(side, lines, selectedFont, engravingType);
   };
+  console.log("data", data);
+  const laserEngravingFontsData =
+    data?.engravingLaserFonts || data?.engravingFonts;
 
+  const handEngravingFontsData = data?.engravingHandFonts;
+  const allLaserSymbolsObjects = data?.allLaserSymbolsObjects;
+
+  let sideText=""
+  if(side==="fr"){
+    sideText="Front"
+  }else if(side==="bk"){
+    sideText="Back"
+  }else if(side==="in"){
+    sideText="Inside"
+  }
+  console.log("side",side)
   return (
-    <div className="engraving-zone" data-eng-zone-code={side.toUpperCase()}>
-      <nav aria-label="Engraving Zone navigation">
-        <ul className="pagination">
-          <span className="zone-name">{side === "fr" ? "Front" : "Back"}</span>
-        </ul>
-      </nav>
-
-      <div>
-        <strong>Select {side === "fr" ? "Front" : "Back"} Font Style</strong>
-        <button onClick={toggleEngravingType}>
-          Switch to {engravingType === "laser" ? "Hand" : "Laser"} Engraving
-        </button>
-      </div>
-
-      <div className="font-container">
-        {engravingType === "laser" ? (
-          <button onClick={() => handleFontSelect("Lucida Calligraphy")}>Lucida Calligraphy</button>
-        ) : (
-          <button onClick={() => handleFontSelect("Hand Script")}>Hand Script</button>
+    <>
+      <div className="engraving-zone active">
+        {engravingSkuAttributes?.length > 1 && (
+          <SwitchTabs
+            activeSide={side}
+            setActiveSide={setActiveSide}
+            engravingSkuAttributes={engravingSkuAttributes}
+          />
         )}
-      </div>
 
-      <div>
-        <strong>Add {side === "fr" ? "Front" : "Back"} Message</strong>
-        <input type="text" value={text} onChange={handleTextChange} maxLength={10} />
+        {/* select font style for laser/hand Engraving */}
+        <nav>
+          <ul className="nav" id="nav-tab" role="tablist">
+            <strong className="font-proxima-bold select-font-name">
+              Select {sideText} Font Style
+            </strong>
+            <li className="nav-item" role="tab">
+              <a
+                tabIndex="0"
+                href="#"
+                className="nav-link p-0"
+                id="nav-laser-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#nav-laser-0"
+                role="tab"
+                aria-controls="#nav-laser-0"
+                aria-selected={false}
+              >
+                {/* Switch to Laser Engraving */}
+                <span className="d-none d-lg-inline-block">-</span>
+                <span
+                  className="text-decoration-underline gtm-switch-laser-engraving-btn"
+                  onClick={toggleEngravingType}
+                >
+                  Switch to {engravingType === "laser" ? "Hand" : "Laser"}{" "}
+                  Engraving
+                </span>
+              </a>
+            </li>
+            <li className="nav-item active" role="tab">
+              <a
+                tabIndex={0}
+                href="#"
+                className={`nav-link p-0 active`}
+                id={`nav-hand-tab`}
+                data-bs-toggle={`tab`}
+                data-bs-target={`#nav-hand-0`}
+                role={`tab`}
+                aria-controls={`#nav-hand-0`}
+              >
+                Switch Hand Engraving Btn
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div className="tab-content" id="nav-tabContent">
+          {engravingType === "laser" && (
+            <>
+              <LaserEngravingFontStyles
+                onUpdate={onUpdate}
+                side={side}
+                laserEngravingFontsData={laserEngravingFontsData}
+                engravingSkuAttributesData={zoneData}
+                setSymbolMapInImage={setSymbolMapInImage}
+                allLaserSymbolsObjects={allLaserSymbolsObjects}
+                setisModelOpen={setisModelOpen}
+              />
+            </>
+          )}
+          {engravingType === "hand" && (
+            <>
+              <HandEngravingFontStyles
+                onUpdate={onUpdate}
+                side={side}
+                handEngravingFontsData={handEngravingFontsData}
+              />
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
