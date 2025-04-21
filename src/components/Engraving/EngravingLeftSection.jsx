@@ -1,44 +1,83 @@
 import React, { useEffect, useState } from "react";
+import { selectEngravingCurrentType } from "../../redux/features/engraving/selectors";
+import { useSelector } from "react-redux";
 
-const EngravingLeft = ({ engravingData, engravingImage, symbolMapInImage }) => {
+const EngravingLeftSection = ({ engravingData, engravingImage }) => {
   const [imageUrl, setImageUrl] = useState("");
-  const encodeScene7Text = (textLine = "") => {
+  const engravingCurrentType = useSelector(selectEngravingCurrentType); // <-- Get current type from Redux
+
+  const encodeScene7Text = (textLine = "", symbolMap = {}) => {
     let encoded = "";
     for (const char of textLine) {
-      if (symbolMapInImage?.[char]) {
-        encoded += `\\f1${symbolMapInImage[char]}\\f0+`;
+      if (symbolMap[char]) {
+        encoded += `\\f1${symbolMap[char]}\\f0`;
       } else {
         encoded += char;
       }
     }
     return encoded;
   };
-  // Helper to build URL section per side
-  const buildURL = (side, data) => {
-    if (!data?.text?.some(Boolean)) return "";
 
-    const lines = data.text
+  const buildZoneURL = (zoneKey, zoneData) => {
+    // Pick the engraving type to preview — e.g. prefer 'laser'
+    const typeData = zoneData?.laser || zoneData?.hand;
+
+    if (!typeData) return "";
+
+    const {
+      text = [],
+      monoText = [],
+      fontName = "",
+      fontCode = "",
+      symbol = {},
+      sortedEngravingSkuAttributes: { templateStd, templateMono } = {},
+    } = typeData;
+    const isMonoFont = fontCode === "M1" || fontCode === "M2";
+    const hasMonoInput = monoText.filter(Boolean).length === 3;
+    const hasTextInput = text.filter(Boolean).length > 0;
+
+    if (isMonoFont && !hasMonoInput) return "";
+    if (!isMonoFont && !hasTextInput) return "";
+
+    if (isMonoFont) {
+      const monoString = monoText
+        .map((char, index) => {
+          if (index === 1) return char.toUpperCase(); // Middle initial uppercase
+          return char.toLowerCase(); // First and last lowercase
+        })
+        .join("");
+      return `&obj=${zoneKey.toUpperCase()}&decal&src=is{JamesAvery/${templateMono}?$text=${encodeURIComponent(
+        monoString
+      )}&$font=${encodeURIComponent(fontName)}}&sharp=1&res=100&show`;
+    }
+
+    const scene7Text = text
       .filter(Boolean)
-      .map(encodeScene7Text)
+      .map((line) => encodeScene7Text(line, symbol))
       .join("\\par%20");
 
-    return `&obj=${side.toUpperCase()}&decal&src=is{JamesAvery/STD_11x8?$text=${lines}&$font=${encodeURIComponent(
-      data.font
-    )}}&sharp=1&res=100&show`;
+    return `&obj=${zoneKey.toUpperCase()}&decal&src=is{JamesAvery/${templateStd}?$text=${encodeURIComponent(
+      scene7Text
+    )}&$font=${encodeURIComponent(fontName)}}&sharp=1&res=100&show`;
   };
 
   useEffect(() => {
-    if (!engravingImage?.length) return;
+    if (!engravingImage?.length || !engravingData) return;
 
     const baseURL = engravingImage[0]?.url + "?wid=704";
-    const updatedEngravingImage = baseURL.replace("/is/image", "/ir/render");
-    const frURL = buildURL("FR", engravingData.fr);
-    const bkURL = buildURL("BK", engravingData.bk);
-   
-    const newImageUrl = `${updatedEngravingImage}${frURL}${bkURL}`;
-    setImageUrl(newImageUrl);
-  }, [engravingData, engravingImage,symbolMapInImage]);
-  console.log("@@ engraving img url", imageUrl);
+    const renderBase = baseURL.replace("/is/image", "/ir/render");
+
+    if (engravingCurrentType === "hand") {
+      setImageUrl(renderBase);
+      return;
+    }
+    const allZoneURLs = Object.entries(engravingData)
+      .map(([zoneKey, zoneData]) => buildZoneURL(zoneKey, zoneData))
+      .join("");
+
+    setImageUrl(`${renderBase}${allZoneURLs}`);
+  }, [engravingData, engravingImage, engravingCurrentType]);
+
   return (
     <div className="col-sm-12 col-lg-6 product-detail-left-section pl-lg-0">
       <div className="engraving-image-container active">
@@ -49,11 +88,13 @@ const EngravingLeft = ({ engravingData, engravingImage, symbolMapInImage }) => {
           itemProp="image"
         />
       </div>
-      <div className="no-preview-message">
-        {/* No Preview Available for Hand Engraving */}
-      </div>
+      {engravingCurrentType === "hand" && (
+        <div className="no-preview-message">
+          No Preview Available for Hand Engraving
+        </div>
+      )}
     </div>
   );
 };
 
-export default EngravingLeft;
+export default EngravingLeftSection;

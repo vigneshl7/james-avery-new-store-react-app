@@ -1,21 +1,30 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { hasErrorMessage } from '../../redux/features/engraving/selectors';
+import { setErrorModelOpen } from '../../redux/features/engraving/engravingSlice';
 
-const SwitchTabs = ({ engravingSkuAttributes, activeSide, setActiveSide }) => {
-  const index = engravingSkuAttributes.findIndex(
+const SwitchTabs = ({ allEngravingSkuAttributesData, activeSide, setActiveSide }) => {
+  const hasErrorMsg=useSelector(hasErrorMessage)
+    const dispatch = useDispatch();
+  
+  const index = allEngravingSkuAttributesData.findIndex(
     (zone) => zone.itemZoneCode.toLowerCase() === activeSide
   );
-  const total = engravingSkuAttributes.length;
-  const currentZone = engravingSkuAttributes[index];
-
+  const total = allEngravingSkuAttributesData.length;
+  const currentZone = allEngravingSkuAttributesData[index];
   const handlePrev = () => {
-    if (index > 0) {
-      setActiveSide(engravingSkuAttributes[index - 1].itemZoneCode.toLowerCase());
+    if (hasErrorMsg) {
+      dispatch(setErrorModelOpen({ isOpen: true, type: 'error' }));
+    } else if (index > 0) {
+      setActiveSide(allEngravingSkuAttributesData[index - 1].itemZoneCode.toLowerCase());
     }
   };
 
   const handleNext = () => {
-    if (index < total - 1) {
-      setActiveSide(engravingSkuAttributes[index + 1].itemZoneCode.toLowerCase());
+    if (hasErrorMsg) {
+      dispatch(setErrorModelOpen({ isOpen: true, type: 'error' }));
+    } else if (index < total - 1) {
+      setActiveSide(allEngravingSkuAttributesData[index + 1].itemZoneCode.toLowerCase());
     }
   };
 

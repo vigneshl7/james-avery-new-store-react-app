@@ -31,7 +31,7 @@ const Symbols = ({ handleSymbolClick, symbol, index }) => {
           src={symbolScene7Url}
           className="symbol-images img-fluid gtm-cyo-laserengrave-symbols"
           alt={symbolName}
-          itemprop="image"
+          itemProp="image"
         />
       </a>
     </>

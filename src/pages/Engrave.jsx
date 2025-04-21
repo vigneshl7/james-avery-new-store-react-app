@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import EngravingMainContent from '../components/Engraving/EngravingMainContent'
 import { productDataFrBk } from "/public/sampleData/FrBk.js";
-// import { productDataInside } from "/public/sampleData/Inside.js";
-
+import { productDataInside } from "/public/sampleData/Inside.js";
+import { productDataFullSide } from "/public/sampleData/FullSide.js";
 
 
 const Engrave = () => {
@@ -20,7 +20,7 @@ const Engrave = () => {
   
   // }, [])
   
-const data=productDataFrBk
+const data=productDataFrBk  
   return (
     <div>
       <Header/>
