@@ -96,7 +96,7 @@ const HandEngravingFontStyles = ({
       } else if (symbolCharLimits[char]) {
         length += Number(symbolCharLimits[char]);
       } else {
-        length += 2;
+        length += 1;
       }
     }
 
@@ -362,10 +362,11 @@ const HandEngravingFontStyles = ({
               Enter Initials
               <a
                 tabIndex="0"
-                href="javascript:void(0)"
+                href=""
                 className="info-icon monogram-info-icon"
                 data-content-asset-id="CYO_monogram_engraving-details"
                 data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-GetContentAssetDetails?contentAssetID=CYO_monogram_engraving-details&amp;isModal=true"
+              
               ></a>
             </strong>
             <div className="col-lg-11 cyoeng-restriction-errmsg d-none  mb-2 mt-2"></div>

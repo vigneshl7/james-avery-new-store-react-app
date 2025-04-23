@@ -3,8 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import EngravingLeftSection from "./EngravingLeftSection";
 import EngravingRightSection from "./EngravingRightSection";
 import EngravingFooter from "./EngravingFooter";
-import Model from "./Model";
-import ErrorModel from "./ErrorModel";
+import Model from "./Models/Model";
+import ErrorModel from "./Models/ErrorModel";
+import MonoInitialModel from "./Models/MonoInitialsModel";
+import UnSupportedCharModel from "./Models/UnSupportedCharModel";
+
+
 import { selectEngravingData } from "../../redux/features/engraving/selectors";
 import { initializeEngravingData } from "../../redux/features/engraving/engravingSlice";
 
@@ -34,6 +38,8 @@ const EngravingMainContent = ({ data }) => {
       <EngravingFooter />
       <Model engravingType="laser" />
       <ErrorModel />
+      <MonoInitialModel/>
+      <UnSupportedCharModel/>
     </>
   );
 };

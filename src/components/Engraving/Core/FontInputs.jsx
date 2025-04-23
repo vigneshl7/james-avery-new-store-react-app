@@ -3,6 +3,7 @@ import React from "react";
 const FontInputs = ({
   index,
   errorMessage,
+  unsupportedError,
   value,
   setActiveInputIndex,
   setCursorPosition,
@@ -51,14 +52,19 @@ const FontInputs = ({
             {errorMessage}
           </div>
 
-          <div className="cyo-error-block cyo-unsupported-error-message d-none">
-            <span className="unsupported-error-text"></span>
-            <span
-              className="info-icon unsupported-info-icon"
-              data-content-asset-id="CYO_standard_supported-characters"
-              data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-GetContentAssetDetails?contentAssetID=CYO_standard_supported-characters&amp;isModal=true"
-            ></span>
-          </div>
+          
+            <div className={`cyo-error-block cyo-unsupported-error-message ${!unsupportedError && "d-none"}`}>
+              <span className="unsupported-error-text">
+                
+                To continue further, please remove unsupported characters
+              </span>
+              <span
+                className="info-icon unsupported-info-icon"
+                data-content-asset-id="CYO_standard_supported-characters"
+                data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-GetContentAssetDetails?contentAssetID=CYO_standard_supported-characters&amp;isModal=true"
+              ></span>
+            </div>
+          
         </div>
       </div>
     </>

@@ -2,10 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   engravingData: {},
-  engravingCurrentType:"laser",
+  engravingCurrentType: "laser",
   isModelOpen: { isOpen: false, type: "laser" },
   hasErrorMessage: false,
   iserrorModelOpen: false,
+  ismonoGramModelOpen: false,
+  isUnSupportedCharacterModelOpen: false,
+
 };
 
 // Initializes engravingData based on zone attributes
@@ -19,7 +22,7 @@ const getInitialEngravingData = (attributes = []) => {
     if (side.maxRowsLaser && side.maxRowsLaser.length > 0) {
       initial[zoneKey].laser = {
         text: [],
-        monoText:[],
+        monoText: [],
         fontName: "",
         fontCode: "",
         symbol: {},
@@ -30,7 +33,7 @@ const getInitialEngravingData = (attributes = []) => {
     if (side.maxRowHand && side.maxRowHand.length > 0) {
       initial[zoneKey].hand = {
         text: [],
-        monoText:[],
+        monoText: [],
         fontName: "",
         fontCode: "",
         symbol: {},
@@ -54,7 +57,7 @@ const engravingSlice = createSlice({
 
     // Sets default values for a zone and engraving type
     setDefaultEngravingForZone: (state, { payload }) => {
-      const { side, type, text, fontName, fontCode,monoText } = payload;
+      const { side, type, text, fontName, fontCode, monoText } = payload;
 
       if (!state.engravingData[side]) {
         state.engravingData[side] = {};
@@ -63,7 +66,7 @@ const engravingSlice = createSlice({
       if (!state.engravingData[side][type]) {
         state.engravingData[side][type] = {
           text: [],
-          monoText:[],
+          monoText: [],
           fontName: "",
           fontCode: "",
           symbol: {},
@@ -82,7 +85,8 @@ const engravingSlice = createSlice({
 
     // Updates partial engraving data like text, fontName, fontCode, or symbols
     setEngravingData: (state, { payload }) => {
-      const { side, type, text,monoText, fontName, fontCode, symbol } = payload;
+      const { side, type, text, monoText, fontName, fontCode, symbol } =
+        payload;
 
       if (!state.engravingData[side]?.[type]) return;
 
@@ -111,7 +115,7 @@ const engravingSlice = createSlice({
 
     // Updates a specific line of text for a zone/type/line index
     updatEngravingText: (state, { payload }) => {
-      const { side, type, value, index,symbol } = payload;
+      const { side, type, value, index, symbol } = payload;
 
       if (!state.engravingData[side]?.[type]?.text) return;
 
@@ -124,12 +128,11 @@ const engravingSlice = createSlice({
       }
     },
     updatEngravingMonoText: (state, { payload }) => {
-      const { side, type, value, index, } = payload;
+      const { side, type, value, index } = payload;
 
       if (!state.engravingData[side]?.[type]?.monoText) return;
 
       state.engravingData[side][type].monoText[index] = value;
-      
     },
 
     // Model open state for engraving details
@@ -141,13 +144,19 @@ const engravingSlice = createSlice({
     setErrorModelOpen: (state, { payload }) => {
       state.iserrorModelOpen = payload.isOpen;
     },
+    setMonoGramModelOpen: (state, { payload }) => {
+      state.ismonoGramModelOpen = payload.isOpen;
+    },
+    setUnSupportedCharacterModelOpen: (state, { payload }) => {
+      state.isUnSupportedCharacterModelOpen = payload.isOpen;
+    },
 
     // Global error flag
     updateHasError: (state, { payload }) => {
       state.hasErrorMessage = payload.isError;
     },
     setEngravingCurrentType: (state, { payload }) => {
-      state.engravingCurrentType = payload; 
+      state.engravingCurrentType = payload;
     },
   },
 });
@@ -161,8 +170,10 @@ export const {
   updatEngravingMonoText,
   setModelOpen,
   setErrorModelOpen,
+  setMonoGramModelOpen,
+  setUnSupportedCharacterModelOpen,
   updateHasError,
-  setEngravingCurrentType
+  setEngravingCurrentType,
 } = engravingSlice.actions;
 
 export default engravingSlice.reducer;

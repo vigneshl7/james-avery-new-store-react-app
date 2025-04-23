@@ -1,18 +1,19 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { errorModel } from "../../redux/features/engraving/selectors";
-import { setErrorModelOpen } from "../../redux/features/engraving/engravingSlice";
+import { errorModel } from "../../../redux/features/engraving/selectors";
+import { setErrorModelOpen } from "../../../redux/features/engraving/engravingSlice";
 
 const ErrorModel = ({ engravingType }) => {
   const dispatch=useDispatch()
   const isOpen=useSelector(errorModel)
 
   return (
+    <>
     <div
       className={`modal fade engraving-details ${isOpen ? "show" : ""}`}
-      id="CYO_hand_engraving-details"
+      id="cyoEngravingModalError"
       tabIndex="-1"
-      aria-labelledby="CYO_hand_engraving-detailsLabel"
+      aria-labelledby="cyoEngravingModalError"
       style={{ display: isOpen ? "block" : "none" }}
       aria-hidden={!isOpen}
       aria-modal={isOpen}
@@ -35,6 +36,8 @@ const ErrorModel = ({ engravingType }) => {
         </div>
       </div>
     </div>
+    {isOpen && <div class="modal-backdrop fade show"></div>}
+    </>
   );
 };
 

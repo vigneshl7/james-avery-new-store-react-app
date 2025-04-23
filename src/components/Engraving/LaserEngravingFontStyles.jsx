@@ -9,6 +9,7 @@ import {
   setModelOpen,
   updatEngravingText,
   updatEngravingMonoText,
+  setMonoGramModelOpen,
 } from "../../redux/features/engraving/engravingSlice";
 import { badWords } from "../../utlis/constants";
 import FontInputMono from "./Core/FontInputMono";
@@ -88,13 +89,13 @@ const LaserEngravingFontStyles = ({
       } else if (symbolCharLimits[char]) {
         length += Number(symbolCharLimits[char]);
       } else {
-        length += 2;
+        length += 1;
       }
     }
 
     return length;
   };
-
+ 
   const truncateByCustomLength = (text, max, symbolCharLimits) => {
     let result = "";
     let length = 0;
@@ -245,9 +246,14 @@ const LaserEngravingFontStyles = ({
   useEffect(() => {
     setMonoText(currentEngravingData?.monoText || ["", "", ""]);
   }, [currentEngravingData,isMonoFont]);
+
+  
   const handleMonoTextChange = (index, textLabel, value) => {
+    // Only allow letters A-Z or a-z
+  const sanitized = value.replace(/[^a-zA-Z]/g, "").toUpperCase();
+
     const updated = [...monoText];
-    updated[index] = value.toUpperCase();
+    updated[index] = sanitized;
   
     setMonoText(updated);
   
@@ -256,7 +262,7 @@ const LaserEngravingFontStyles = ({
         side: activeSide,
         type: engravingType,
         index,
-        value: value,
+        value: sanitized,
       })
     );
   };
@@ -378,7 +384,11 @@ const LaserEngravingFontStyles = ({
                 className="info-icon monogram-info-icon"
                 data-content-asset-id="CYO_monogram_engraving-details"
                 data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-GetContentAssetDetails?contentAssetID=CYO_monogram_engraving-details&amp;isModal=true"
-              ></a>
+                onClick={(e) =>{
+                  e.preventDefault();
+                  dispatch(setMonoGramModelOpen({ isOpen: true }));
+                } }
+             ></a>
             </strong>
             <div className="col-lg-11 cyoeng-restriction-errmsg d-none  mb-2 mt-2"></div>
             <div className="input-form d-flex">

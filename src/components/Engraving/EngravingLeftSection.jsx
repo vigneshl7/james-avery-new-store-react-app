@@ -18,6 +18,15 @@ const EngravingLeftSection = ({ engravingData, engravingImage }) => {
     return encoded;
   };
 
+  // Escapes only the characters that Scene7 expects to be encoded in $text (if not already)
+const escapeScene7SpecialChars = (str) => {
+  return str
+    .replace(/#/g, "%23")
+    .replace(/%/g, "%25")
+    .replace(/&/g, "%26")
+    .replace(/\(/g, "%28")
+    .replace(/\)/g, "%29");
+};
   const buildZoneURL = (zoneKey, zoneData) => {
     // Pick the engraving type to preview — e.g. prefer 'laser'
     const typeData = zoneData?.laser || zoneData?.hand;
@@ -36,29 +45,31 @@ const EngravingLeftSection = ({ engravingData, engravingImage }) => {
     const hasMonoInput = monoText.filter(Boolean).length === 3;
     const hasTextInput = text.filter(Boolean).length > 0;
 
+    //No mono preview unless all 3 initials entered
     if (isMonoFont && !hasMonoInput) return "";
     if (!isMonoFont && !hasTextInput) return "";
 
+    // Mono Font Rendering
     if (isMonoFont) {
       const monoString = monoText
-        .map((char, index) => {
-          if (index === 1) return char.toUpperCase(); // Middle initial uppercase
-          return char.toLowerCase(); // First and last lowercase
-        })
+        .map((char, i) => (i === 1 ? char.toUpperCase() : char.toLowerCase()))
         .join("");
+
       return `&obj=${zoneKey.toUpperCase()}&decal&src=is{JamesAvery/${templateMono}?$text=${encodeURIComponent(
         monoString
       )}&$font=${encodeURIComponent(fontName)}}&sharp=1&res=100&show`;
     }
 
-    const scene7Text = text
+    //Standard Font Rendering
+    const encodedLines = text
       .filter(Boolean)
-      .map((line) => encodeScene7Text(line, symbol))
-      .join("\\par%20");
+      .map((line) => encodeScene7Text(line, symbol));
 
-    return `&obj=${zoneKey.toUpperCase()}&decal&src=is{JamesAvery/${templateStd}?$text=${encodeURIComponent(
-      scene7Text
-    )}&$font=${encodeURIComponent(fontName)}}&sharp=1&res=100&show`;
+    const scene7Text = encodedLines.join("\\par%20"); 
+
+    return `&obj=${zoneKey.toUpperCase()}&decal&src=is{JamesAvery/${templateStd}?$text=${scene7Text}&$font=${encodeURIComponent(
+      fontName
+    )}}&sharp=1&res=100&show`;
   };
 
   useEffect(() => {
