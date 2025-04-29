@@ -18,15 +18,15 @@ const Engraving = ({
   const dispatch = useDispatch();
   const engravingData = useSelector(selectEngravingData);
   const currentEngravingData = engravingData[activeSide]?.[engravingType];
-  const { maxRowsLaser, standardDefaultFont } = activeZoneData;
+  const { maxRowsLaser, standardDefaultFont,maxRowHand } = activeZoneData;
 
   useEffect(() => {
     // Wait until both engravingData and font list are available
     if (!currentEngravingData || currentEngravingData.text.length > 0) return;
     if (!laserEngravingFontsData || laserEngravingFontsData.length === 0)
       return;
-
-    const rows = Number(maxRowsLaser || 1);
+    const rowsCount=engravingType==="laser" ?maxRowsLaser:maxRowHand
+    const rows = Number(rowsCount || 1);
     let defaultFont=""
     if(engravingType==="laser"){
       defaultFont =

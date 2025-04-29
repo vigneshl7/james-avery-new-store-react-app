@@ -1,32 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { selectEngravingCurrentType } from "../../redux/features/engraving/selectors";
 import { useSelector } from "react-redux";
+import { getScene7Text } from "../../utlis/scene7Utils";
+
 
 const EngravingLeftSection = ({ engravingData, engravingImage }) => {
   const [imageUrl, setImageUrl] = useState("");
   const engravingCurrentType = useSelector(selectEngravingCurrentType); // <-- Get current type from Redux
 
-  const encodeScene7Text = (textLine = "", symbolMap = {}) => {
-    let encoded = "";
-    for (const char of textLine) {
-      if (symbolMap[char]) {
-        encoded += `\\f1${symbolMap[char]}\\f0`;
-      } else {
-        encoded += char;
-      }
-    }
-    return encoded;
-  };
-
-  // Escapes only the characters that Scene7 expects to be encoded in $text (if not already)
-const escapeScene7SpecialChars = (str) => {
-  return str
-    .replace(/#/g, "%23")
-    .replace(/%/g, "%25")
-    .replace(/&/g, "%26")
-    .replace(/\(/g, "%28")
-    .replace(/\)/g, "%29");
-};
+ 
   const buildZoneURL = (zoneKey, zoneData) => {
     // Pick the engraving type to preview — e.g. prefer 'laser'
     const typeData = zoneData?.laser || zoneData?.hand;
@@ -60,12 +42,11 @@ const escapeScene7SpecialChars = (str) => {
       )}&$font=${encodeURIComponent(fontName)}}&sharp=1&res=100&show`;
     }
 
-    //Standard Font Rendering
-    const encodedLines = text
-      .filter(Boolean)
-      .map((line) => encodeScene7Text(line, symbol));
-
-    const scene7Text = encodedLines.join("\\par%20"); 
+    const scene7Text = text
+    .filter(Boolean)
+    .map((line) => getScene7Text(line, symbol)) // handles symbol + special chars
+    .join("\\par%20");
+   
 
     return `&obj=${zoneKey.toUpperCase()}&decal&src=is{JamesAvery/${templateStd}?$text=${scene7Text}&$font=${encodeURIComponent(
       fontName

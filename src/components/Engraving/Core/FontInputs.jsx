@@ -12,13 +12,29 @@ const FontInputs = ({
   handleTextChange,
   currentLength,
 }) => {
+  const hasErrors = errorMessage?.length > 0;
+  const hasUnsupportedError = errorMessage?.some((msg) =>
+    msg.includes("unsupported")
+  );
+  const hasOtherErrors = errorMessage?.some(
+    (msg) =>
+      msg.includes("extra character") ||
+      msg.includes("profane") ||
+      msg.includes("trademarked")
+  );
+  const errorClass = [
+    hasErrors && hasUnsupportedError && "error-unsupported-danger",
+    hasErrors && hasOtherErrors && "error-danger",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  
+ 
   return (
     <>
       <div className="position-relative row m-0 mt-3">
         <div className="col-lg-1 p-0 font-line">Line {index + 1}</div>
-        <div
-          className={`col-lg-11 input-form ${errorMessage && "error-danger"}`}
-        >
+        <div className={`col-lg-11 input-form ${errorClass}`}>
           <div className="input-counter" data-line-count="0">
             <input
               name="laserEngravingMessageInput1ForZone0"
@@ -46,25 +62,26 @@ const FontInputs = ({
             </span>
           </div>
 
-          <div
-            className={`cyo-error-block cyo-error-message ${!errorMessage && "d-none"}`}
-          >
-            {errorMessage}
-          </div>
-
-          
-            <div className={`cyo-error-block cyo-unsupported-error-message ${!unsupportedError && "d-none"}`}>
-              <span className="unsupported-error-text">
-                
-                To continue further, please remove unsupported characters
-              </span>
-              <span
-                className="info-icon unsupported-info-icon"
-                data-content-asset-id="CYO_standard_supported-characters"
-                data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-GetContentAssetDetails?contentAssetID=CYO_standard_supported-characters&amp;isModal=true"
-              ></span>
-            </div>
-          
+          {hasErrors &&
+            errorMessage.map((msg, i) =>
+              msg.includes("unsupported") ? (
+                <div
+                  key={i}
+                  className="cyo-error-block cyo-unsupported-error-message"
+                >
+                  <span className="unsupported-error-text">{msg}</span>
+                  <span
+                    className="info-icon unsupported-info-icon"
+                    data-content-asset-id="CYO_standard_supported-characters"
+                    data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-GetContentAssetDetails?contentAssetID=CYO_standard_supported-characters&amp;isModal=true"
+                  ></span>
+                </div>
+              ) : (
+                <div className={`cyo-error-block cyo-error-message `}>
+                  {msg}
+                </div>
+              )
+            )}
         </div>
       </div>
     </>

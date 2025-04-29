@@ -11,8 +11,14 @@ import {
   setModelOpen,
   setEngravingData,
   updatEngravingText,
+  updateEngravingErrorMessage,
+  updateErrorMessages,
 } from "../../redux/features/engraving/engravingSlice";
 import { badWords } from "../../utlis/constants";
+import {
+  containsBadWordWholeWord,
+  isUnsupportedCharFound,
+} from "../../utlis/helpers";
 const HandEngravingFontStyles = ({
   activeSide,
   handEngravingFontsData,
@@ -20,15 +26,18 @@ const HandEngravingFontStyles = ({
   activeZoneData,
   engravingType,
   currentEngravingData,
-  activeSideText
+  activeSideText,
 }) => {
- 
   const dispatch = useDispatch();
   const { maxRowHand } = activeZoneData;
   const selectedFontCode = currentEngravingData?.fontCode;
   const inputText = currentEngravingData?.text || [];
   const [fullInput, setFullInput] = useState([]);
-  const [errorMessages, setErrorMessages] = useState([]);
+  const errorMessages = useSelector(
+    (state) =>
+      state.engraving.errorMessages?.[activeSide]?.[engravingType] || []
+  );
+  // const [errorMessages, setErrorMessages] = useState([]);
   const [activeInputIndex, setActiveInputIndex] = useState(null);
   const [cursorPosition, setCursorPosition] = useState(0);
   const [isInputNotSelected, setisInputNotSelected] = useState(false);
@@ -36,11 +45,11 @@ const HandEngravingFontStyles = ({
   const [symbolCharLimits, setSymbolCharLimits] = useState({});
   const [seeMore, setseeMore] = useState(false);
 
-
-
   useEffect(() => {
     setFullInput(inputText);
-  }, [activeSide]);
+  }, [activeSide, inputText]);
+
+
 
   //getMax length of each font select
   const getMaxLengthForFont = (font) => {
@@ -73,18 +82,29 @@ const HandEngravingFontStyles = ({
     // Validate input and generate error messages
     const updatedErrors = fullInput.map((line) => {
       const lineLength = getCustomLength(line);
+      let errors = [];
+
       if (lineLength > newMaxLength) {
-        return "To continue, please remove extra character(s) or try a different font.";
+        errors.push(
+          "To continue, please remove extra character(s) or try a different font."
+        );
       }
-      return "";
+      return errors;
     });
 
-    // Update local error state for UI
-    setErrorMessages(updatedErrors);
-
-    // Dispatch global error flag to Redux (only once)
-    const hasAnyError = updatedErrors.some((msg) => msg !== "");
-    dispatch(updateHasError({ isError: hasAnyError }));
+    dispatch(
+      updateErrorMessages({
+        side: activeSide,
+        type: engravingType,
+        messages: updatedErrors,
+      })
+    );
+     const hasAnyError = updatedErrors.some(
+          (msgArr) =>
+            Array.isArray(msgArr) &&
+            msgArr.some((msg) => msg && msg.trim().length > 0)
+        );
+        dispatch(updateHasError({ isError: hasAnyError }));
   };
 
   const getCustomLength = (text) => {
@@ -106,17 +126,17 @@ const HandEngravingFontStyles = ({
   const truncateByCustomLength = (text, max, symbolCharLimits) => {
     let result = "";
     let length = 0;
-  
+
     for (const char of text) {
       const isNormalChar = /[\w\s]/.test(char);
       const charLength = isNormalChar ? 1 : symbolCharLimits[char] || 1;
-  
+
       if (length + charLength > max) break;
-  
+
       result += char;
       length += charLength;
     }
-  
+
     return result;
   };
   const handleTextChange = (index, value) => {
@@ -130,38 +150,56 @@ const HandEngravingFontStyles = ({
     // Join all lines to check for split bad words
     const combinedString = updatedFullInput.join("").toLowerCase();
 
-    const containsBadWord = badWords.some((word) =>
-      cleanedValue.toLowerCase().includes(word.toLowerCase())
+    const containsBadWord = containsBadWordWholeWord(cleanedValue, badWords);
+    const containsBadWordCombined = containsBadWordWholeWord(
+      combinedString,
+      badWords
     );
 
-    const containsBadWordCombined = badWords.some((word) =>
-      combinedString.includes(word.toLowerCase())
+    const isUnsupported = isUnsupportedCharFound(
+      cleanedValue,
+      symbolCharLimits
     );
     // Truncate based on max character length
-    const truncatedValue = truncateByCustomLength(cleanedValue, maxLength,symbolCharLimits);
+    const truncatedValue = truncateByCustomLength(
+      cleanedValue,
+      maxLength,
+      symbolCharLimits
+    );
     // Validate text
-    let errorMessage = "";
     const charLength = getCustomLength(cleanedValue);
+    let errorMessage = [];
 
     if (containsBadWord || containsBadWordCombined) {
-      errorMessage =
-        "To continue, please remove any profane, inappropriate, or trademarked content.";
-    } else if (charLength > maxLength) {
-      errorMessage =
-        "To continue, please remove extra character(s) or try a different font.";
+      errorMessage.push(
+        "To continue, please remove any profane, inappropriate, or trademarked content."
+      );
+    }
+    if (isUnsupported) {
+      errorMessage.push(
+        "To continue further, please remove unsupported characters."
+      );
+    }
+    if (charLength > maxLength) {
+      errorMessage.push(
+        "To continue, please remove extra character(s) or try a different font."
+      );
     }
 
-    // Update local error state
-    setErrorMessages((prev) => {
-      const next = [...prev];
-      next[index] = errorMessage;
-      return next;
-    });
+   dispatch(updateEngravingErrorMessage({
+         side: activeSide,
+         type: engravingType,
+         index,
+         errorMessage,
+       }));
     // Global error status
-    dispatch(updateHasError({ isError: !!errorMessage }));
-
+    dispatch(
+      updateHasError({
+        isError: errorMessage?.some((msg) => msg.trim().length > 0),
+      })
+    );
     // Update Redux only if valid
-    if (!containsBadWord && !containsBadWordCombined) {
+    if (errorMessage?.length === 0) {
       dispatch(
         updatEngravingText({
           side: activeSide,
@@ -203,12 +241,14 @@ const HandEngravingFontStyles = ({
       return updated;
     });
     if (newLength > maxLength) {
-      setErrorMessages((prevErrors) => {
-        const updated = [...prevErrors];
-        updated[activeInputIndex] =
-          "To continue, please remove extra character(s) or try a different font.";
-        return updated;
-      });
+        dispatch(updateEngravingErrorMessage({
+              side: activeSide,
+              type: engravingType,
+              index: activeInputIndex,
+              errorMessage: [
+                "To continue, please remove extra character(s) or try a different font.",
+              ],
+            }));
       return;
     }
     setSymbolCharLimits((prev) => ({
@@ -218,35 +258,23 @@ const HandEngravingFontStyles = ({
     dispatch(
       updatEngravingText({
         side: activeSide,
-        type:engravingType,
+        type: engravingType,
         value: newText,
         index: activeInputIndex,
         symbol: {
           [symbol]: scene7code,
-          charLimit
+          charLimit,
         },
-        
       })
     );
 
+     dispatch(updateEngravingErrorMessage({
+          side: activeSide,
+          type: engravingType,
+          index: activeInputIndex,
+          errorMessage: [],
+        }));
     
-    // dispatch(
-    //   setEngravingData({
-    //     side: activeSide,
-    //     symbol: {
-    //       [symbol]: scene7code,
-    //       charLimit
-    //     },
-    //   })
-    // );
-
-  
-
-    setErrorMessages((prevErrors) => {
-      const updated = [...prevErrors];
-      updated[activeInputIndex] = "";
-      return updated;
-    });
 
     setCursorPosition((prev) => prev + charLimit);
   };
@@ -263,9 +291,9 @@ const HandEngravingFontStyles = ({
   return (
     <div
       className={`tab-pane fade active show`}
-      id="nav-laser-0"
+      id="nav-hand-0"
       role="tabpanel"
-      aria-labelledby="nav-laser-tab"
+      aria-labelledby="nav-hand-tab"
     >
       <div>
         <div className="d-flex font-container">
@@ -284,7 +312,7 @@ const HandEngravingFontStyles = ({
             href="#"
             className="get-content-details d-inline-flex align-items-center gtm-cyo-laserdetails-btn"
             data-is-laser-engraving="true"
-            data-content-asset-id="CYO_laser_engraving-details"
+            data-content-asset-id="CYO_hand_engraving-details"
             data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-GetContentAssetDetails?contentAssetID=CYO_laser_engraving-details&amp;isModal=true"
             tabIndex="0"
             onClick={(e) => {
@@ -309,7 +337,7 @@ const HandEngravingFontStyles = ({
             <FontInputs
               key={index}
               index={index}
-              errorMessage={errorMessages[index]}
+              errorMessage={errorMessages[index] ||[]}
               value={fullInput[index]}
               handleTextChange={handleTextChange}
               setActiveInputIndex={setActiveInputIndex}
@@ -356,7 +384,7 @@ const HandEngravingFontStyles = ({
         <div>
           <div
             className="mono-inputs position-relative row d-none"
-            data-engraving-type="laser"
+            data-engraving-type="hand"
           >
             <strong className="font-proxima-bold d-flex align-items-center mono-enter-initials">
               Enter Initials
@@ -366,7 +394,6 @@ const HandEngravingFontStyles = ({
                 className="info-icon monogram-info-icon"
                 data-content-asset-id="CYO_monogram_engraving-details"
                 data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-GetContentAssetDetails?contentAssetID=CYO_monogram_engraving-details&amp;isModal=true"
-              
               ></a>
             </strong>
             <div className="col-lg-11 cyoeng-restriction-errmsg d-none  mb-2 mt-2"></div>

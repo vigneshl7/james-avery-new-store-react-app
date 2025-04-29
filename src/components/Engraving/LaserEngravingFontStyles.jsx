@@ -10,9 +10,15 @@ import {
   updatEngravingText,
   updatEngravingMonoText,
   setMonoGramModelOpen,
+  updateEngravingErrorMessage, 
+  updateErrorMessages
 } from "../../redux/features/engraving/engravingSlice";
 import { badWords } from "../../utlis/constants";
 import FontInputMono from "./Core/FontInputMono";
+import {
+  containsBadWordWholeWord,
+  isUnsupportedCharFound,
+} from "../../utlis/helpers";
 const LaserEngravingFontStyles = ({
   activeSide,
   laserEngravingFontsData,
@@ -20,15 +26,17 @@ const LaserEngravingFontStyles = ({
   activeZoneData,
   engravingType,
   currentEngravingData,
-  activeSideText
+  activeSideText,
 }) => {
-
   const dispatch = useDispatch();
   const { maxRowsLaser } = activeZoneData;
   const selectedFontCode = currentEngravingData?.fontCode;
   const inputText = currentEngravingData?.text || [];
   const [fullInput, setFullInput] = useState([]);
-  const [errorMessages, setErrorMessages] = useState([]);
+  const errorMessages = useSelector(
+    state => state.engraving.errorMessages?.[activeSide]?.[engravingType] || []
+  );
+  // const [errorMessages, setErrorMessages] = useState([]);
   const [activeInputIndex, setActiveInputIndex] = useState(null);
   const [cursorPosition, setCursorPosition] = useState(0);
   const [isInputNotSelected, setisInputNotSelected] = useState(false);
@@ -38,10 +46,19 @@ const LaserEngravingFontStyles = ({
   const [isMonoFont, setisMonoFont] = useState(false);
   const [monoText, setMonoText] = useState(["", "", ""]);
 
-
   useEffect(() => {
     setFullInput(inputText);
   }, [activeSide, inputText]);
+
+  useEffect(() => {
+    const fontCode = currentEngravingData?.fontCode;
+    if (fontCode === "M1" || fontCode === "M2") {
+      setisMonoFont(true);
+    } else {
+      setisMonoFont(false);
+    }
+  }, [, currentEngravingData?.fontCode]);
+
 
   //getMax length of each font select
   const getMaxLengthForFont = (font) => {
@@ -66,17 +83,28 @@ const LaserEngravingFontStyles = ({
     // Validate input and generate error messages
     const updatedErrors = fullInput.map((line) => {
       const lineLength = getCustomLength(line);
+      let errors = [];
+
       if (lineLength > newMaxLength) {
-        return "To continue, please remove extra character(s) or try a different font.";
+        errors.push(
+          "To continue, please remove extra character(s) or try a different font."
+        );
       }
-      return "";
+      return errors;
     });
 
     // Update local error state for UI
-    setErrorMessages(updatedErrors);
+   dispatch(updateErrorMessages({
+  side: activeSide,
+  type: engravingType,
+  messages: updatedErrors,
+}));
 
-    // Dispatch global error flag to Redux (only once)
-    const hasAnyError = updatedErrors.some((msg) => msg !== "");
+    const hasAnyError = updatedErrors.some(
+      (msgArr) =>
+        Array.isArray(msgArr) &&
+        msgArr.some((msg) => msg && msg.trim().length > 0)
+    );
     dispatch(updateHasError({ isError: hasAnyError }));
   };
 
@@ -95,24 +123,24 @@ const LaserEngravingFontStyles = ({
 
     return length;
   };
- 
+
   const truncateByCustomLength = (text, max, symbolCharLimits) => {
     let result = "";
     let length = 0;
-  
+
     for (const char of text) {
       const isNormalChar = /[\w\s]/.test(char);
       const charLength = isNormalChar ? 1 : symbolCharLimits[char] || 1;
-  
+
       if (length + charLength > max) break;
-  
+
       result += char;
       length += charLength;
     }
-  
+
     return result;
   };
-  
+
   const handleTextChange = (index, value) => {
     const cleanedValue = value || "";
     // Calculate new text array and update fullInput
@@ -123,41 +151,58 @@ const LaserEngravingFontStyles = ({
     // Join all lines to check for split bad words
     const combinedString = updatedFullInput.join("").toLowerCase();
 
-    const containsBadWord = badWords.some((word) =>
-      cleanedValue.toLowerCase().includes(word.toLowerCase())
+    const containsBadWord = containsBadWordWholeWord(cleanedValue, badWords);
+    const containsBadWordCombined = containsBadWordWholeWord(
+      combinedString,
+      badWords
     );
 
-    const containsBadWordCombined = badWords.some((word) =>
-      combinedString.includes(word.toLowerCase())
+    const isUnsupported = isUnsupportedCharFound(
+      cleanedValue,
+      symbolCharLimits
     );
 
     // Truncate based on max character length
-    const truncatedValue = truncateByCustomLength(cleanedValue, maxLength,symbolCharLimits);
+    const truncatedValue = truncateByCustomLength(
+      cleanedValue,
+      maxLength,
+      symbolCharLimits
+    );
 
-    // Validate text
-    let errorMessage = "";
     const charLength = getCustomLength(cleanedValue);
 
+    let errorMessage = [];
     if (containsBadWord || containsBadWordCombined) {
-      errorMessage =
-        "To continue, please remove any profane, inappropriate, or trademarked content.";
-    } else if (charLength > maxLength) {
-      errorMessage =
-        "To continue, please remove extra character(s) or try a different font.";
+      errorMessage.push(
+        "To continue, please remove any profane, inappropriate, or trademarked content."
+      );
+    }
+    if (isUnsupported) {
+      errorMessage.push(
+        "To continue further, please remove unsupported characters."
+      );
+    }
+    if (charLength > maxLength) {
+      errorMessage.push(
+        "To continue, please remove extra character(s) or try a different font."
+      );
     }
 
-    // Update local error state
-    setErrorMessages((prev) => {
-      const next = [...prev];
-      next[index] = errorMessage;
-      return next;
-    });
+    dispatch(updateEngravingErrorMessage({
+      side: activeSide,
+      type: engravingType,
+      index,
+      errorMessage,
+    }));
 
     // Global error status
-    dispatch(updateHasError({ isError: !!errorMessage }));
-
+    dispatch(
+      updateHasError({
+        isError: errorMessage?.some((msg) => msg.trim().length > 0),
+      })
+    );
     // Update Redux only if valid
-    if (!containsBadWord && !containsBadWordCombined) {
+    if (errorMessage?.length === 0) {
       dispatch(
         updatEngravingText({
           side: activeSide,
@@ -199,12 +244,14 @@ const LaserEngravingFontStyles = ({
       return updated;
     });
     if (newLength > maxLength) {
-      setErrorMessages((prevErrors) => {
-        const updated = [...prevErrors];
-        updated[activeInputIndex] =
-          "To continue, please remove extra character(s) or try a different font.";
-        return updated;
-      });
+      dispatch(updateEngravingErrorMessage({
+        side: activeSide,
+        type: engravingType,
+        index: activeInputIndex,
+        errorMessage: [
+          "To continue, please remove extra character(s) or try a different font.",
+        ],
+      }));
       return;
     }
     setSymbolCharLimits((prev) => ({
@@ -234,29 +281,29 @@ const LaserEngravingFontStyles = ({
     //   })
     // );
 
-    setErrorMessages((prevErrors) => {
-      const updated = [...prevErrors];
-      updated[activeInputIndex] = "";
-      return updated;
-    });
+    dispatch(updateEngravingErrorMessage({
+      side: activeSide,
+      type: engravingType,
+      index: activeInputIndex,
+      errorMessage: [],
+    }));
 
     setCursorPosition((prev) => prev + charLimit);
   };
 
   useEffect(() => {
     setMonoText(currentEngravingData?.monoText || ["", "", ""]);
-  }, [currentEngravingData,isMonoFont]);
+  }, [currentEngravingData, isMonoFont]);
 
-  
   const handleMonoTextChange = (index, textLabel, value) => {
     // Only allow letters A-Z or a-z
-  const sanitized = value.replace(/[^a-zA-Z]/g, "").toUpperCase();
+    const sanitized = value.replace(/[^a-zA-Z]/g, "").toUpperCase();
 
     const updated = [...monoText];
     updated[index] = sanitized;
-  
+
     setMonoText(updated);
-  
+
     dispatch(
       updatEngravingMonoText({
         side: activeSide,
@@ -266,7 +313,6 @@ const LaserEngravingFontStyles = ({
       })
     );
   };
-  
 
   const currentLengths = useMemo(() => {
     return fullInput.map((val) => getCustomLength(val || ""));
@@ -315,7 +361,7 @@ const LaserEngravingFontStyles = ({
           </a>
         </div>
         <div
-          className={`std-inputs ${isMonoFont && "d-none"} `}
+          className={`std-inputs ${isMonoFont ? "d-none" : ""} `}
           data-total-count="0"
           data-engraving-type="laser"
         >
@@ -327,7 +373,7 @@ const LaserEngravingFontStyles = ({
             <FontInputs
               key={index}
               index={index}
-              errorMessage={errorMessages[index]}
+              errorMessage={errorMessages[index] ||[]}
               value={fullInput[index]}
               handleTextChange={handleTextChange}
               setActiveInputIndex={setActiveInputIndex}
@@ -373,7 +419,7 @@ const LaserEngravingFontStyles = ({
         </div>
         <div>
           <div
-            className={`mono-inputs position-relative row ${!isMonoFont && "d-none"}`}
+            className={`mono-inputs position-relative row ${isMonoFont ? "" : "d-none"}`}
             data-engraving-type="laser"
           >
             <strong className="font-proxima-bold d-flex align-items-center mono-enter-initials">
@@ -384,11 +430,11 @@ const LaserEngravingFontStyles = ({
                 className="info-icon monogram-info-icon"
                 data-content-asset-id="CYO_monogram_engraving-details"
                 data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-GetContentAssetDetails?contentAssetID=CYO_monogram_engraving-details&amp;isModal=true"
-                onClick={(e) =>{
+                onClick={(e) => {
                   e.preventDefault();
                   dispatch(setMonoGramModelOpen({ isOpen: true }));
-                } }
-             ></a>
+                }}
+              ></a>
             </strong>
             <div className="col-lg-11 cyoeng-restriction-errmsg d-none  mb-2 mt-2"></div>
             <div className="input-form d-flex">

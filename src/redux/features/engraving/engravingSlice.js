@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   engravingData: {},
+  errorMessages:{},
   engravingCurrentType: "laser",
   isModelOpen: { isOpen: false, type: "laser" },
   hasErrorMessage: false,
@@ -127,6 +128,17 @@ const engravingSlice = createSlice({
         };
       }
     },
+    updateEngravingErrorMessage: (state, { payload }) => {
+      const { side, type, index, errorMessage } = payload;
+      if (!state.errorMessages[side]) state.errorMessages[side] = {};
+      if (!state.errorMessages[side][type]) state.errorMessages[side][type] = [];
+      state.errorMessages[side][type][index] = errorMessage; 
+    },
+    updateErrorMessages: (state, action) => {
+      const { side, type, messages } = action.payload;
+      if (!state.errorMessages[side]) state.errorMessages[side] = {};
+      state.errorMessages[side][type] = messages;
+    },
     updatEngravingMonoText: (state, { payload }) => {
       const { side, type, value, index } = payload;
 
@@ -167,6 +179,8 @@ export const {
   setEngravingData,
   updateFont,
   updatEngravingText,
+  updateEngravingErrorMessage,
+  updateErrorMessages,
   updatEngravingMonoText,
   setModelOpen,
   setErrorModelOpen,
