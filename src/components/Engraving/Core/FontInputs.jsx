@@ -11,6 +11,7 @@ const FontInputs = ({
   maxLength,
   handleTextChange,
   currentLength,
+  handleTextBlur
 }) => {
   const hasErrors = errorMessage?.length > 0;
   const hasUnsupportedError = errorMessage?.some((msg) =>
@@ -55,6 +56,7 @@ const FontInputs = ({
                 setisInputNotSelected(false);
               }}
               onKeyUp={(e) => setCursorPosition(e.target.selectionStart)}
+              onBlur={handleTextBlur}
             />
             <span className="counter">
               <span className="current-counter">{currentLength}</span>/

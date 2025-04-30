@@ -17,6 +17,7 @@ import {
 import { badWords } from "../../utlis/constants";
 import {
   containsBadWordWholeWord,
+  getEngravingPricePayload,
   isUnsupportedCharFound,
 } from "../../utlis/helpers";
 const HandEngravingFontStyles = ({
@@ -30,6 +31,8 @@ const HandEngravingFontStyles = ({
 }) => {
   const dispatch = useDispatch();
   const { maxRowHand } = activeZoneData;
+    const engravingData = useSelector(selectEngravingData);
+  
   const selectedFontCode = currentEngravingData?.fontCode;
   const inputText = currentEngravingData?.text || [];
   const [fullInput, setFullInput] = useState([]);
@@ -49,7 +52,30 @@ const HandEngravingFontStyles = ({
     setFullInput(inputText);
   }, [activeSide, inputText]);
 
-
+  const fetchPriceFromAPI = async (engravingData, activeSide, engravingType) => {
+    console.log("insde")
+    const pid = "CM-1093-485374"; 
+    const payload = getEngravingPricePayload({
+      engravingData,
+      activeSide,
+      engravingType,
+      pid,
+    });
+  console.log("payload",payload)
+    const queryString = new URLSearchParams(payload).toString();
+    console.log("querystirng",queryString)
+    const url = `https://www.jamesavery.com/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-CyoEngravingVariation?${queryString}`;
+  
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      console.log("Fetched Price:", data);
+      // Optionally dispatch a Redux action to store this
+      // dispatch(setEngravingPrice(data));
+    } catch (err) {
+      console.error("Engraving price fetch error:", err);
+    }
+  };
 
   //getMax length of each font select
   const getMaxLengthForFont = (font) => {
@@ -340,6 +366,7 @@ const HandEngravingFontStyles = ({
               errorMessage={errorMessages[index] ||[]}
               value={fullInput[index]}
               handleTextChange={handleTextChange}
+              handleTextBlur={() => fetchPriceFromAPI(engravingData, activeSide, engravingType)}
               setActiveInputIndex={setActiveInputIndex}
               setCursorPosition={setCursorPosition}
               setisInputNotSelected={setisInputNotSelected}

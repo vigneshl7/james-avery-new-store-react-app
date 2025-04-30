@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   engravingData: {},
   errorMessages:{},
+  engravingInputCache: {},
   engravingCurrentType: "laser",
   isModelOpen: { isOpen: false, type: "laser" },
   hasErrorMessage: false,
@@ -146,6 +147,12 @@ const engravingSlice = createSlice({
 
       state.engravingData[side][type].monoText[index] = value;
     },
+    updateFullInputCache: (state, { payload }) => {
+      const { side, type, value, index } = payload;
+      if (!state.engravingInputCache[side]) state.engravingInputCache[side] = {};
+      if (!state.engravingInputCache[side][type]) state.engravingInputCache[side][type] = [];
+      state.engravingInputCache[side][type][index] = value;
+    },
 
     // Model open state for engraving details
     setModelOpen: (state, { payload }) => {
@@ -187,6 +194,7 @@ export const {
   setMonoGramModelOpen,
   setUnSupportedCharacterModelOpen,
   updateHasError,
+  updateFullInputCache,
   setEngravingCurrentType,
 } = engravingSlice.actions;
 

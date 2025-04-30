@@ -65,6 +65,11 @@ const Engraving = ({
   useEffect(() => {
     dispatch(setEngravingCurrentType(engravingType));
   }, [dispatch, engravingType]);
+  
+
+  
+  
+  
   return (
     <>
       {engravingData && engravingType==="laser" && (
