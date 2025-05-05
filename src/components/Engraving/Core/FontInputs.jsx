@@ -1,4 +1,6 @@
 import React from "react";
+import { setUnSupportedCharacterModelOpen } from "../../../redux/features/engraving/engravingSlice";
+import { useDispatch } from "react-redux";
 
 const FontInputs = ({
   index,
@@ -11,8 +13,9 @@ const FontInputs = ({
   maxLength,
   handleTextChange,
   currentLength,
-  handleTextBlur
+  handleTextBlur,
 }) => {
+  const dispatch = useDispatch();
   const hasErrors = errorMessage?.length > 0;
   const hasUnsupportedError = errorMessage?.some((msg) =>
     msg.includes("unsupported")
@@ -29,8 +32,7 @@ const FontInputs = ({
   ]
     .filter(Boolean)
     .join(" ");
-  
- 
+
   return (
     <>
       <div className="position-relative row m-0 mt-3">
@@ -74,6 +76,12 @@ const FontInputs = ({
                   <span className="unsupported-error-text">{msg}</span>
                   <span
                     className="info-icon unsupported-info-icon"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      dispatch(
+                        setUnSupportedCharacterModelOpen({ isOpen: true })
+                      );
+                    }}
                     data-content-asset-id="CYO_standard_supported-characters"
                     data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-GetContentAssetDetails?contentAssetID=CYO_standard_supported-characters&amp;isModal=true"
                   ></span>

@@ -1,20 +1,20 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  unsupportedCharModel} from "../../../redux/features/engraving/selectors";
+import { unsupportedCharModel } from "../../../redux/features/engraving/selectors";
+import { setUnSupportedCharacterModelOpen } from "../../../redux/features/engraving/engravingSlice";
 
-import { setMonoGramModelOpen } from "../../../redux/features/engraving/engravingSlice";
 
 const Model = ({ engravingType }) => {
   const dispatch = useDispatch();
-  const  isOpen  = useSelector(unsupportedCharModel);
+  const isOpen = useSelector(unsupportedCharModel);
 
   return (
     <>
       <div
         className={`modal fade engraving-details ${isOpen ? "show" : ""}`}
-        id="CYO_monogram_engraving-details"
+        id="CYO_standard_supported-characters"
         tabIndex="-1"
-        aria-labelledby="CYO_monogram_engraving-details"
+        aria-labelledby="CYO_standard_supported-characters"
         style={{ display: isOpen ? "block" : "none" }}
         aria-hidden={!isOpen}
         aria-modal={isOpen}
@@ -29,24 +29,28 @@ const Model = ({ engravingType }) => {
                 data-bs-dismiss="modal"
                 aria-label="Close"
                 onClick={() =>
-                  dispatch(setMonoGramModelOpen({ isOpen: false }))
+                  dispatch(setUnSupportedCharacterModelOpen({ isOpen: false }))
                 }
               ></button>
             </div>
             <div className="modal-body">
-              <p>
+              <p className="mb-4">
                 <strong className="m-0 font-proxima-bold">
-                  Monogram Engraving
+                  Supported Characters
                 </strong>
               </p>
-              <ul className="monogram-list-details">
-                <li>Allows for Initials Only</li>
-                <li>
-                  Traditional Monograms are First, Last and Middle Initials
-                </li>
-                <li>Must Enter All 3 Initials for Monogram</li>
-                <li>Monograms are Defaulted to Uppercase</li>
-              </ul>
+              <p className="unsupported-text-heading">Special Characters</p>
+              <p className="font-14 mb-4 text-start">
+                ! &nbsp; " &nbsp; # &nbsp; $ &nbsp; % &nbsp; &amp; &nbsp; '
+                &nbsp; ( &nbsp; ) &nbsp; * &nbsp; + &nbsp; , &nbsp; . &nbsp; /
+                &nbsp; : &nbsp; ; &nbsp; {"<"} &nbsp; = &nbsp; {">"} &nbsp; ?
+                &nbsp; @ &nbsp; [ &nbsp; - &nbsp; ] &nbsp; ^ &nbsp; _ &nbsp; `
+                &nbsp; {"{"} &nbsp; | &nbsp; {"}"} &nbsp; ~
+              </p>{" "}
+              <p className="unsupported-text-heading">Letters</p>
+              <p className="font-14 mb-4">A - Z, a - z</p>
+              <p className="unsupported-text-heading">Numbers</p>
+              <p className="font-14 mb-2">0 - 9</p>
             </div>
           </div>
         </div>

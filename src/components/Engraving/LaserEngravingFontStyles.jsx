@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import FontCard from "./Core/FontCard";
 import FontInputs from "./Core/FontInputs";
 import Symbols from "./Core/Symbols";
@@ -12,7 +18,6 @@ import {
   setMonoGramModelOpen,
   updateEngravingErrorMessage,
   updateErrorMessages,
-  updateFullInputCache,
 } from "../../redux/features/engraving/engravingSlice";
 import { badWords } from "../../utlis/constants";
 import FontInputMono from "./Core/FontInputMono";
@@ -30,37 +35,36 @@ const LaserEngravingFontStyles = ({
   engravingType,
   currentEngravingData,
   activeSideText,
+  symbolCharLimits,
+  setSymbolCharLimits,
+  fullInput,
+  setFullInput,
 }) => {
   const dispatch = useDispatch();
   const { maxRowsLaser } = activeZoneData;
   const engravingData = useSelector(selectEngravingData);
   const selectedFontCode = currentEngravingData?.fontCode;
   const inputText = currentEngravingData?.text || [];
-  // const [fullInput, setFullInput] = useState([]);
   const errorMessages = useSelector(
     (state) =>
       state.engraving.errorMessages?.[activeSide]?.[engravingType] || []
   );
-  // const [errorMessages, setErrorMessages] = useState([]);
   const [activeInputIndex, setActiveInputIndex] = useState(null);
   const [cursorPosition, setCursorPosition] = useState(0);
   const [isInputNotSelected, setisInputNotSelected] = useState(false);
-  const [charLimit, setCharLimit] = useState(2);
-  const [symbolCharLimits, setSymbolCharLimits] = useState({});
   const [seeMore, setseeMore] = useState(false);
   const [isMonoFont, setisMonoFont] = useState(false);
   const [monoText, setMonoText] = useState(["", "", ""]);
-  
-  const fullInput = useSelector(
-    (state) => state.engraving.engravingInputCache?.[activeSide]?.[engravingType] || []
-  );
-console.log("fullinput",fullInput)
-  // useEffect(() => {
-  //   if(engravingFullInputCache){
 
-  //     setFullInput(engravingFullInputCache);
-  //   }
-  // }, [activeSide,engravingType, engravingFullInputCache]);
+  const hasMountedRef = useRef(false);
+
+  useEffect(() => {
+    if (hasMountedRef.current) {
+      setFullInput(inputText);
+    } else {
+      hasMountedRef.current = true;
+    }
+  }, [activeSide]);
 
   useEffect(() => {
     const fontCode = currentEngravingData?.fontCode;
@@ -76,7 +80,6 @@ console.log("fullinput",fullInput)
     activeSide,
     engravingType
   ) => {
-    console.log("insde");
     const pid = "CM-1093-485374";
     const payload = getEngravingPricePayload({
       engravingData,
@@ -84,15 +87,12 @@ console.log("fullinput",fullInput)
       engravingType,
       pid,
     });
-    console.log("payload", payload);
     const queryString = new URLSearchParams(payload).toString();
-    console.log("querystirng", queryString);
     const url = `https://www.jamesavery.com/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-CyoEngravingVariation?${queryString}`;
 
     try {
       const res = await fetch(url);
       const data = await res.json();
-      console.log("Fetched Price:", data);
       // Optionally dispatch a Redux action to store this
       // dispatch(setEngravingPrice(data));
     } catch (err) {
@@ -100,7 +100,6 @@ console.log("fullinput",fullInput)
     }
   };
 
-  console.log("error", errorMessages);
   //getMax length of each font select
   const getMaxLengthForFont = (font) => {
     return activeZoneData?.[`maxColumns${font}`] || 10;
@@ -186,15 +185,7 @@ console.log("fullinput",fullInput)
     const cleanedValue = value || "";
     const updatedFullInput = [...fullInput];
     updatedFullInput[index] = cleanedValue;
-    // setFullInput(updatedFullInput);
-    dispatch(
-      updateFullInputCache({
-        side: activeSide,
-        type: engravingType,
-        value: updatedFullInput[index],
-        index,
-      })
-    );
+    setFullInput(updatedFullInput);
 
     // Join all lines to check for split bad words
     const combinedString = updatedFullInput.join("").toLowerCase();
@@ -243,14 +234,13 @@ console.log("fullinput",fullInput)
         isError: errorMessage?.some((msg) => msg.trim().length > 0),
       })
     );
-    // Update Redux only if valid
     if (errorMessage?.length === 0) {
       // Truncate based on max character length
-    const truncatedValue = truncateByCustomLength(
-      cleanedValue,
-      maxLength,
-      symbolCharLimits
-    );
+      const truncatedValue = truncateByCustomLength(
+        cleanedValue,
+        maxLength,
+        symbolCharLimits
+      );
       dispatch(
         updatEngravingText({
           side: activeSide,
@@ -272,7 +262,6 @@ console.log("fullinput",fullInput)
     const decimalCode = event.currentTarget?.dataset?.decimalcode;
     const scene7code = event.currentTarget?.dataset?.scene7code;
     const charLimit = Number(event.currentTarget?.dataset?.charlimit || 2);
-    setCharLimit(charLimit);
     if (!decimalCode || !scene7code) return;
 
     const symbol = String.fromCodePoint(decimalCode);
@@ -285,25 +274,18 @@ console.log("fullinput",fullInput)
     const beforeCursor = baseText.slice(0, cursorPosition);
     const afterCursor = baseText.slice(cursorPosition);
     const newText = beforeCursor + symbol + afterCursor;
-
+    
     const tempSymbolLimits = {
       ...symbolCharLimits,
       [symbol]: charLimit,
     };
     const newLength = getCustomLength(newText, tempSymbolLimits);
-    // setFullInput((prev) => {
-    //   const updated = [...prev];
-    //   updated[activeInputIndex] = newText;
-    //   return updated;
-    // });
-    dispatch(
-      updateFullInputCache({
-        side: activeSide,
-        type: engravingType,
-        value: newText,
-        index:activeInputIndex,
-      })
-    );
+    setFullInput((prev) => {
+      const updated = [...prev];
+      updated[activeInputIndex] = newText;
+      return updated;
+    });
+
     if (newLength > maxLength) {
       dispatch(
         updateEngravingErrorMessage({
@@ -333,8 +315,6 @@ console.log("fullinput",fullInput)
         },
       })
     );
-
-    
 
     dispatch(
       updateEngravingErrorMessage({
@@ -370,7 +350,6 @@ console.log("fullinput",fullInput)
       })
     );
   };
-console.log("symbolCharLimits",symbolCharLimits)
   const currentLengths = useMemo(() => {
     return fullInput.map((val) => getCustomLength(val, symbolCharLimits));
   }, [fullInput, symbolCharLimits]);

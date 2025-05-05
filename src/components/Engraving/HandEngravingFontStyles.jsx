@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import FontCard from "./Core/FontCard";
 import FontInputs from "./Core/FontInputs";
 import Symbols from "./Core/Symbols";
@@ -28,44 +28,53 @@ const HandEngravingFontStyles = ({
   engravingType,
   currentEngravingData,
   activeSideText,
+  symbolCharLimits,
+  setSymbolCharLimits,
+  fullInput,
+  setFullInput,
 }) => {
   const dispatch = useDispatch();
   const { maxRowHand } = activeZoneData;
-    const engravingData = useSelector(selectEngravingData);
-  
+  const engravingData = useSelector(selectEngravingData);
+
   const selectedFontCode = currentEngravingData?.fontCode;
   const inputText = currentEngravingData?.text || [];
-  const [fullInput, setFullInput] = useState([]);
   const errorMessages = useSelector(
     (state) =>
       state.engraving.errorMessages?.[activeSide]?.[engravingType] || []
   );
-  // const [errorMessages, setErrorMessages] = useState([]);
   const [activeInputIndex, setActiveInputIndex] = useState(null);
   const [cursorPosition, setCursorPosition] = useState(0);
   const [isInputNotSelected, setisInputNotSelected] = useState(false);
-  const [charLimit, setCharLimit] = useState(2);
-  const [symbolCharLimits, setSymbolCharLimits] = useState({});
   const [seeMore, setseeMore] = useState(false);
+  const hasMountedRef = useRef(false);
 
   useEffect(() => {
-    setFullInput(inputText);
-  }, [activeSide, inputText]);
+    if (hasMountedRef.current) {
+      setFullInput(inputText);
+    } else {
+      hasMountedRef.current = true;
+    }
+  }, [activeSide]);
 
-  const fetchPriceFromAPI = async (engravingData, activeSide, engravingType) => {
-    console.log("insde")
-    const pid = "CM-1093-485374"; 
+  const fetchPriceFromAPI = async (
+    engravingData,
+    activeSide,
+    engravingType
+  ) => {
+    console.log("insde");
+    const pid = "CM-1093-485374";
     const payload = getEngravingPricePayload({
       engravingData,
       activeSide,
       engravingType,
       pid,
     });
-  console.log("payload",payload)
+    console.log("payload", payload);
     const queryString = new URLSearchParams(payload).toString();
-    console.log("querystirng",queryString)
+    console.log("querystirng", queryString);
     const url = `https://www.jamesavery.com/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-CyoEngravingVariation?${queryString}`;
-  
+
     try {
       const res = await fetch(url);
       const data = await res.json();
@@ -81,9 +90,9 @@ const HandEngravingFontStyles = ({
   const getMaxLengthForFont = (font) => {
     if (!font) return 10;
 
-    const numericPart = font.replace(/^[A-Z]+/, ""); // remove leading letters like "S"
-    const legacyKey = `maxColumns${font}`; // e.g. maxColumnsS3
-    const modernKey = `maxColumns${numericPart}`; // e.g. maxColumns18
+    const numericPart = font.replace(/^[A-Z]+/, "");
+    const legacyKey = `maxColumns${font}`;
+    const modernKey = `maxColumns${numericPart}`;
 
     return (
       Number(activeZoneData?.[legacyKey]) ||
@@ -107,7 +116,7 @@ const HandEngravingFontStyles = ({
 
     // Validate input and generate error messages
     const updatedErrors = fullInput.map((line) => {
-      const lineLength = getCustomLength(line);
+      const lineLength = getCustomLength(line, symbolCharLimits);
       let errors = [];
 
       if (lineLength > newMaxLength) {
@@ -125,21 +134,20 @@ const HandEngravingFontStyles = ({
         messages: updatedErrors,
       })
     );
-     const hasAnyError = updatedErrors.some(
-          (msgArr) =>
-            Array.isArray(msgArr) &&
-            msgArr.some((msg) => msg && msg.trim().length > 0)
-        );
-        dispatch(updateHasError({ isError: hasAnyError }));
+    const hasAnyError = updatedErrors.some(
+      (msgArr) =>
+        Array.isArray(msgArr) &&
+        msgArr.some((msg) => msg && msg.trim().length > 0)
+    );
+    dispatch(updateHasError({ isError: hasAnyError }));
   };
-
-  const getCustomLength = (text) => {
+  const getCustomLength = (text, symbolLimits) => {
     let length = 0;
 
     for (let char of text) {
       if (/[\w\s]/.test(char)) {
         length += 1;
-      } else if (symbolCharLimits[char]) {
+      } else if (symbolLimits && symbolLimits[char]) {
         length += Number(symbolCharLimits[char]);
       } else {
         length += 1;
@@ -168,7 +176,6 @@ const HandEngravingFontStyles = ({
   const handleTextChange = (index, value) => {
     const cleanedValue = value || "";
 
-    // Calculate new text array and update fullInput
     const updatedFullInput = [...fullInput];
     updatedFullInput[index] = cleanedValue;
     setFullInput(updatedFullInput);
@@ -186,14 +193,9 @@ const HandEngravingFontStyles = ({
       cleanedValue,
       symbolCharLimits
     );
-    // Truncate based on max character length
-    const truncatedValue = truncateByCustomLength(
-      cleanedValue,
-      maxLength,
-      symbolCharLimits
-    );
+   
     // Validate text
-    const charLength = getCustomLength(cleanedValue);
+    const charLength = getCustomLength(cleanedValue,symbolCharLimits);
     let errorMessage = [];
 
     if (containsBadWord || containsBadWordCombined) {
@@ -212,20 +214,25 @@ const HandEngravingFontStyles = ({
       );
     }
 
-   dispatch(updateEngravingErrorMessage({
-         side: activeSide,
-         type: engravingType,
-         index,
-         errorMessage,
-       }));
-    // Global error status
+    dispatch(
+      updateEngravingErrorMessage({
+        side: activeSide,
+        type: engravingType,
+        index,
+        errorMessage,
+      })
+    );
     dispatch(
       updateHasError({
         isError: errorMessage?.some((msg) => msg.trim().length > 0),
       })
     );
-    // Update Redux only if valid
     if (errorMessage?.length === 0) {
+      const truncatedValue = truncateByCustomLength(
+        cleanedValue,
+        maxLength,
+        symbolCharLimits
+      );
       dispatch(
         updatEngravingText({
           side: activeSide,
@@ -247,7 +254,6 @@ const HandEngravingFontStyles = ({
     const decimalCode = event.currentTarget?.dataset?.decimalcode;
     const scene7code = event.currentTarget?.dataset?.scene7code;
     const charLimit = Number(event?.currentTarget?.dataset?.charlimit || 2);
-    setCharLimit(charLimit);
     if (!decimalCode || !scene7code) return;
 
     const symbol = String.fromCodePoint(decimalCode);
@@ -260,21 +266,27 @@ const HandEngravingFontStyles = ({
     const beforeCursor = baseText.slice(0, cursorPosition);
     const afterCursor = baseText.slice(cursorPosition);
     const newText = beforeCursor + symbol + afterCursor;
-    const newLength = getCustomLength(newText);
+    const tempSymbolLimits = {
+      ...symbolCharLimits,
+      [symbol]: charLimit,
+    };
+    const newLength = getCustomLength(newText,tempSymbolLimits);
     setFullInput((prev) => {
       const updated = [...prev];
       updated[activeInputIndex] = newText;
       return updated;
     });
     if (newLength > maxLength) {
-        dispatch(updateEngravingErrorMessage({
-              side: activeSide,
-              type: engravingType,
-              index: activeInputIndex,
-              errorMessage: [
-                "To continue, please remove extra character(s) or try a different font.",
-              ],
-            }));
+      dispatch(
+        updateEngravingErrorMessage({
+          side: activeSide,
+          type: engravingType,
+          index: activeInputIndex,
+          errorMessage: [
+            "To continue, please remove extra character(s) or try a different font.",
+          ],
+        })
+      );
       return;
     }
     setSymbolCharLimits((prev) => ({
@@ -294,18 +306,19 @@ const HandEngravingFontStyles = ({
       })
     );
 
-     dispatch(updateEngravingErrorMessage({
-          side: activeSide,
-          type: engravingType,
-          index: activeInputIndex,
-          errorMessage: [],
-        }));
-    
+    dispatch(
+      updateEngravingErrorMessage({
+        side: activeSide,
+        type: engravingType,
+        index: activeInputIndex,
+        errorMessage: [],
+      })
+    );
 
     setCursorPosition((prev) => prev + charLimit);
   };
   const currentLengths = useMemo(() => {
-    return fullInput.map((val) => getCustomLength(val || ""));
+    return fullInput.map((val) => getCustomLength(val,symbolCharLimits));
   }, [fullInput, symbolCharLimits]);
 
   const sortedSymbols = allHandSymbolsObjects.sort((a, b) =>
@@ -363,10 +376,12 @@ const HandEngravingFontStyles = ({
             <FontInputs
               key={index}
               index={index}
-              errorMessage={errorMessages[index] ||[]}
+              errorMessage={errorMessages[index] || []}
               value={fullInput[index]}
               handleTextChange={handleTextChange}
-              handleTextBlur={() => fetchPriceFromAPI(engravingData, activeSide, engravingType)}
+              handleTextBlur={() =>
+                fetchPriceFromAPI(engravingData, activeSide, engravingType)
+              }
               setActiveInputIndex={setActiveInputIndex}
               setCursorPosition={setCursorPosition}
               setisInputNotSelected={setisInputNotSelected}

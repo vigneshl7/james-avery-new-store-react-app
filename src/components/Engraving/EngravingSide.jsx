@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import SwitchTabs from "./SwitchTabs";
-// import LaserEngravingFontStyles from "./LaserEngravingFontStyles";
-// import HandEngravingFontStyles from "./HandEngravingFontStyles";
 import { useSelector } from "react-redux";
 import { selectEngravingData } from "../../redux/features/engraving/selectors";
 import Engraving from "./Engraving";
@@ -109,6 +107,24 @@ const EngravingSide = ({
             />
           </>
         </div>
+        {data?.product?.isEngravable &&
+          data?.product?.webStyleCYO?.length > 0 && (
+            <div class="want-to-attach-to-holder-section text-center">
+              <div class="want-to-attach-to-holder-heading">
+                Want to Attach to a Holder?
+              </div>
+              <div>
+                <a
+                  tabindex="0"
+                  class="want-to-attach-to-holder-link text-underline"
+                  href="#"
+                  data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-SaveEngravedDetailsToCyoExp"
+                >
+                  See All Holders
+                </a>
+              </div>
+            </div>
+          )}
       </div>
     </>
   );
