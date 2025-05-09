@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
-const Header = () => {
+const Header = ({ showRightButton }) => {
+  const [showHeaderPopup, setShowHeaderPopup] = useState(false);
+  const handleLogoClick = () => {
+    setShowHeaderPopup(true);
+  };
+
   return (
     <>
       <header className="cyo-global-header">
@@ -15,6 +20,7 @@ const Header = () => {
                   tabIndex="0"
                   className="logo-home pl-2 from-engraving gtm-cyo-header-logo"
                   href="/"
+                  // onClick={}
                 >
                   <img
                     src="https://www.jamesavery.com/on/demandware.static/-/Sites/default/dw90740acd/images/logoImage/JAC-logo.svg"
@@ -35,23 +41,25 @@ const Header = () => {
                   </span>
                 </div>
               </div>
-              <div className="btn-container cyo-btn-wrapper">
-                <a
-                  tabIndex="0"
-                  href="javascript:void(0)"
-                  className="btn btn-primary font-proxima-bold cyo-btn-done  from-engraving  gtm-done-btn"
-                  data-bs-toggle="modal"
-                  data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-CyoSaveEngravedDetails"
-                >
-                  Done -
-                  <span
-                    className="cyo-product-price from-engraving"
-                    data-base-price="$49"
+              {showRightButton && (
+                <div className="btn-container cyo-btn-wrapper">
+                  <a
+                    tabIndex="0"
+                    href="/CyoReviewPage"
+                    className="btn btn-primary font-proxima-bold cyo-btn-done  from-engraving  gtm-done-btn"
+                    data-bs-toggle="modal"
+                    // data-href="/on/demandware.store/Sites-JamesAvery-Site/en_US/Product-CyoSaveEngravedDetails"
                   >
-                    $69
-                  </span>
-                </a>
-              </div>
+                    Done -
+                    <span
+                      className="cyo-product-price from-engraving"
+                      data-base-price="$49"
+                    >
+                      $69
+                    </span>
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </nav>
