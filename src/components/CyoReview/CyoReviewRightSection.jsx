@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import wishlist from "./../../assets/wishlist.png";
 
 const CyoReviewRightSection = ({ data = {} }) => {
   return (
@@ -19,7 +20,12 @@ const CyoReviewRightSection = ({ data = {} }) => {
       >
         Review Custom Jewelry Details
       </div>
-      <div className="engraving-summary-info">
+      <div
+        className="engraving-summary-info"
+        style={{
+          width: "100%",
+        }}
+      >
         <div className="engraving-info">
           <div className="item-image text-center">
             <img
@@ -67,7 +73,7 @@ const CyoReviewRightSection = ({ data = {} }) => {
                     data-engrave="true"
                     data-lineitem-uuid=""
                   >
-                    Engrave
+                    {"Engrave "}
                   </a>
 
                   <a
@@ -87,7 +93,13 @@ const CyoReviewRightSection = ({ data = {} }) => {
           </div>
         </div>
       </div>
-      <hr></hr>
+      <span
+        style={{
+          backgroundColor: "#d7d7d7",
+          height: 1,
+          width: "100%",
+        }}
+      ></span>
       <a
         className="add-to-wish-list logged-in-user review gtm-cyo-review-wishlist"
         href="#"
@@ -98,9 +110,19 @@ const CyoReviewRightSection = ({ data = {} }) => {
         data-wishlist-show="/wishlist"
         data-gtm-array='[{"id":"CM-1093","name":"Engravable Disc Charm","brand":"James Avery","price":49,"category":"Charms","variant":"CM-1093-485374","quantity":1,"list":"CYO - Engrave","dimension1":"Sterling Silver"}]'
       >
-        <span className="fa-stack fa-lg">
-          <i className="fa fa-inverse fa-stack-1x"></i>
-          <i className="fa fa-heart-o fa-stack-1x"></i>
+        <span
+        // className="fa-stack fa-lg"
+        // style={{ backgroundColor: "red" }}
+        >
+          {/* <img
+            src={wishlist}
+            // className="engraving-image"
+            // alt="Engravable Disc Charm image number 0.0"
+            style={{ width: 20, color: "black" }}
+            itemprop="image"
+          /> */}
+          {/* <i className="fa fa-inverse fa-stack-1x"></i>
+          <i className="fa fa-heart-o fa-stack-1x"></i> */}
         </span>
         <span className="add-to-wish-list-text gtm-cyo-wish-list-btn">
           Save to Wishlist
