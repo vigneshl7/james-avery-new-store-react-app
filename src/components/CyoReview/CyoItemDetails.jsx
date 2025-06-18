@@ -4,9 +4,9 @@ const CyoItemDetails = ({ data = {} }) => {
   return (
     <div
       className="engraving-summary-info"
-      style={{
-        width: "100%",
-      }}
+      // style={{
+      //   width: "100%",
+      // }}
     >
       <div className="engraving-info">
         <div className="item-image text-center">

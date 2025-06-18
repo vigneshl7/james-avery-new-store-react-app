@@ -21,7 +21,7 @@ const CyoReviewMainContent = ({ data }) => {
   return (
     <>
       <div role="main" id="maincontent">
-        <div className="cyo-engraving-product-detail product-wrapper cyo-wrapper cyo-page engrave-review-page">
+        <div className="engrave-review-page product-wrapper cyo-page">
           <div className="row m-0 align-items-lg-start">
             <CyoReviewLeftSection
               engravingData={engravingData}

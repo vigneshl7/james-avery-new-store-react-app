@@ -6,8 +6,7 @@ import { getScene7Text } from "../../utlis/scene7Utils";
 
 const EngravingLeftSection = ({ engravingData, engravingImage }) => {
   const [imageUrl, setImageUrl] = useState("");
-  const engravingCurrentType = useSelector(selectEngravingCurrentType); // <-- Get current type from Redux
-
+  const engravingCurrentType = useSelector(selectEngravingCurrentType); 
  
   const buildZoneURL = (zoneKey, zoneData) => {
     // Pick the engraving type to preview — e.g. prefer 'laser'

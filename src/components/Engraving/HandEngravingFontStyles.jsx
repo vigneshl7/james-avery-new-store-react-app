@@ -62,7 +62,6 @@ const HandEngravingFontStyles = ({
     activeSide,
     engravingType
   ) => {
-    console.log("insde");
     const pid = "CM-1093-485374";
     const payload = getEngravingPricePayload({
       engravingData,

@@ -13,4 +13,13 @@ export default defineConfig({
       "@hooks": path.resolve(__dirname, "src/hooks"),
     },
   },
+  server: {
+  proxy: {
+    '/api': {
+      target: 'https://8ehiy3y6.api.commercecloud.salesforce.com',
+      changeOrigin: true,
+      rewrite: path => path.replace(/^\/api/, '/custom/cyo-data/v1/organizations/f_ecom_bjjc_030/engraveProduct')
+    }
+  }
+}
 });

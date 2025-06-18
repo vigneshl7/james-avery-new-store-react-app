@@ -4,9 +4,9 @@ const CyoItemPriceSummary = ({ data = {} }) => {
   return (
     <div
       className="add-to-cart-actions"
-      style={{
-        width: "100%",
-      }}
+      // style={{
+      //   width: "100%",
+      // }}
     >
       <div className="row">
         <div className="price-summary col-sm-12 col-md-6">

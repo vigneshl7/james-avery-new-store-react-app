@@ -27,7 +27,6 @@ const Engraving = ({
   const [fullInputLaser, setFullInputLaser] = useState([]);
   const [fullInputHand, setFullInputHand] = useState([]);
 
-  console.log("fullinputlaser", fullInputLaser);
 
   useEffect(() => {
     // Wait until both engravingData and font list are available

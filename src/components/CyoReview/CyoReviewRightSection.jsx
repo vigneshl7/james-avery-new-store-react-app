@@ -7,18 +7,18 @@ const CyoReviewRightSection = ({ data = {} }) => {
   return (
     <div
       className="col-12 col-lg-6 product-detail-right-section"
-      style={{
-        flexDirection: "column",
-        alignItems: "flex-start",
-        display: "flex",
-        justifyContent: "flex-start",
-      }}
+      // style={{
+      //   flexDirection: "column",
+      //   alignItems: "flex-start",
+      //   display: "flex",
+      //   justifyContent: "flex-start",
+      // }}
     >
       <div
         className="engraving-review-heading text-center"
-        style={{
-          alignSelf: "center",
-        }}
+        // style={{
+        //   alignSelf: "center",
+        // }}
       >
         Review Custom Jewelry Details
       </div>
@@ -26,11 +26,11 @@ const CyoReviewRightSection = ({ data = {} }) => {
       <CyoItemDetails />
 
       <span
-        style={{
-          backgroundColor: "#d7d7d7",
-          height: 1,
-          width: "100%",
-        }}
+        // style={{
+        //   backgroundColor: "#d7d7d7",
+        //   height: 1,
+        //   width: "100%",
+        // }}
       ></span>
       <a
         className="add-to-wish-list logged-in-user review gtm-cyo-review-wishlist"
