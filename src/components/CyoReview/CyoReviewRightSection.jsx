@@ -5,33 +5,14 @@ import CyoItemPriceSummary from "./CyoItemPriceSummary";
 
 const CyoReviewRightSection = ({ data = {} }) => {
   return (
-    <div
-      className="col-12 col-lg-6 product-detail-right-section"
-      style={{
-        flexDirection: "column",
-        alignItems: "flex-start",
-        display: "flex",
-        justifyContent: "flex-start",
-      }}
-    >
-      <div
-        className="engraving-review-heading text-center"
-        style={{
-          alignSelf: "center",
-        }}
-      >
+    <div className="col-12 col-lg-6 product-detail-right-section">
+      <div className="engraving-review-heading text-center">
         Review Custom Jewelry Details
       </div>
 
       <CyoItemDetails />
 
-      <span
-        style={{
-          backgroundColor: "#d7d7d7",
-          height: 1,
-          width: "100%",
-        }}
-      ></span>
+      <span></span>
       <a
         className="add-to-wish-list logged-in-user review gtm-cyo-review-wishlist"
         href="#"
@@ -44,13 +25,12 @@ const CyoReviewRightSection = ({ data = {} }) => {
       >
         <span
         // className="fa-stack fa-lg"
-        // style={{ backgroundColor: "red" }}
         >
           {/* <img
             src={wishlist}
             // className="engraving-image"
             // alt="Engravable Disc Charm image number 0.0"
-            style={{ width: 20, color: "black" }}
+          
             itemprop="image"
           /> */}
           {/* <i className="fa fa-inverse fa-stack-1x"></i>

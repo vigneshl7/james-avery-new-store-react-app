@@ -76,6 +76,12 @@ const CyoReviewLeftSection = ({ engravingData, engravingImage }) => {
           alt="Engraving Preview"
           itemProp="image"
         />
+        {/* <img
+          src="https://cyo.jamesavery.com/2a7sv2aj"
+          class="d-block img-fluid engraving-image"
+          alt="Engravable Disc Charm image number 0.0"
+          itemprop="image"
+        ></img> */}
       </div>
       {engravingCurrentType === "hand" && (
         <div className="no-preview-message">

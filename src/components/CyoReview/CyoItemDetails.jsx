@@ -2,12 +2,7 @@ import React, { useState } from "react";
 
 const CyoItemDetails = ({ data = {} }) => {
   return (
-    <div
-      className="engraving-summary-info"
-      style={{
-        width: "100%",
-      }}
-    >
+    <div className="engraving-summary-info">
       <div className="engraving-info">
         <div className="item-image text-center">
           <img

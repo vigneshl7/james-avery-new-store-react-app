@@ -2,12 +2,7 @@ import React, { useState } from "react";
 
 const CyoItemPriceSummary = ({ data = {} }) => {
   return (
-    <div
-      className="add-to-cart-actions"
-      style={{
-        width: "100%",
-      }}
-    >
+    <div className="add-to-cart-actions">
       <div className="row">
         <div className="price-summary col-sm-12 col-md-6">
           <div className="price-container">
